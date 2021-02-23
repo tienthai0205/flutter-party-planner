@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:party_planner/screens/detail_screen/party_detail_screen.dart';
 import 'package:party_planner/screens/home_screen/home_screen.dart';
 import 'package:party_planner/screens/landing_screen.dart';
-import 'package:party_planner/screens/party_detail_screen.dart';
 
 Map routes = <String, WidgetBuilder>{
   'splash_screen': (BuildContext context) => LandingScreen(),
