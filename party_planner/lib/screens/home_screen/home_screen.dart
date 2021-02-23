@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:grouped_list/grouped_list.dart';
+import 'package:intl/intl.dart';
 import 'package:party_planner/constants.dart';
 import 'package:party_planner/models/party.dart';
 import 'package:http/http.dart' as http;
@@ -71,19 +73,21 @@ class _HomeScreenState extends State<HomeScreen> {
                               AlwaysStoppedAnimation<Color>(kLightTheme),
                         ),
                       )
-                    : ListView.separated(
-                        itemBuilder: (_, index) => PartyCard(
+                    : GroupedListView(
+                        elements: parties,
+                        groupBy: (Party party) =>
+                            groupEventByDate(timeStamp: party.dateTime),
+                        itemBuilder: (_, element) => PartyCard(
                           screenHeight: screenHeight,
                           screenWidth: screenWidth,
                           cardWidth: cardWidth,
                           cardHeight: cardHeight,
-                          party: parties[index],
+                          party: element,
                         ),
-                        separatorBuilder: (context, index) => TimelineTitle(
+                        groupSeparatorBuilder: (value) => TimelineTitle(
                           screenWidth: screenWidth,
-                          text: "Friday, 12 March",
+                          text: value,
                         ),
-                        itemCount: parties.length,
                       ),
               ),
             ],
@@ -91,5 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String groupEventByDate({String timeStamp}) {
+    String dateSlug;
+    DateTime partyTimeStamp = DateTime.parse(timeStamp);
+
+    dateSlug = DateFormat.yMMMMEEEEd().format(partyTimeStamp);
+    return dateSlug;
   }
 }
