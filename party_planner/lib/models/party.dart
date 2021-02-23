@@ -7,7 +7,7 @@ class Party {
   String dateTime;
   String location;
   bool invitationSent;
-  List<Person> _partyInvitees;
+  List<Person> _partyInvitees = [];
   String imageLink;
 
   Party(

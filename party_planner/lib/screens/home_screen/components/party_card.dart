@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:party_planner/models/party.dart';
 
 import '../../../constants.dart';
@@ -82,7 +83,7 @@ class PartyCardTopDetail extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
-                "10 people are going",
+                '${party.numberOfInvitees} people are going',
                 style: kfontSecondary.copyWith(color: kLightTheme),
               ),
             ),
@@ -112,7 +113,7 @@ class PartyCardBottomDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     DateTime partyTime = DateTime.parse(party.dateTime);
-    String time = ' ${partyTime.hour} : ${partyTime.minute}0';
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -135,7 +136,7 @@ class PartyCardBottomDetail extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  time,
+                  DateFormat.Hm().format(partyTime),
                   style: kfontSecondary.copyWith(fontWeight: FontWeight.bold),
                 ),
               )

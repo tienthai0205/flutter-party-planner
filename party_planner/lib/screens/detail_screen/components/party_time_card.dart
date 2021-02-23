@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../constants.dart';
 
 class PartyDetailTimeCard extends StatelessWidget {
-  const PartyDetailTimeCard({
-    Key key,
-  }) : super(key: key);
+  const PartyDetailTimeCard({Key key, this.time, this.date}) : super(key: key);
+
+  final String time;
+  final String date;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class PartyDetailTimeCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 10.0),
                 child: Text(
-                  "21:00",
+                  time,
                   style: kfontSecondary.copyWith(color: kLightTheme),
                 ),
               ),
@@ -40,7 +41,7 @@ class PartyDetailTimeCard extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.only(left: 10.0),
                 child: Text(
-                  "21-3-2021",
+                  date,
                   style: kfontSecondary.copyWith(color: kLightTheme),
                 ),
               ),
