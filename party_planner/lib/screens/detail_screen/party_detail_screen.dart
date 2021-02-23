@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:party_planner/constants.dart';
 
 import 'components/hero_image.dart';
@@ -15,6 +14,22 @@ class PartyDetailScreem extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           PartyHeroImage(screenHeight: screenHeight),
+          Align(
+            alignment: Alignment.topLeft,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.only(left: 10.0),
+                child: IconButton(
+                    icon: Icon(
+                      Icons.arrow_back_ios,
+                      color: kLightTheme,
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    }),
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.bottomCenter,
             child: PartyDetailWrapper(
