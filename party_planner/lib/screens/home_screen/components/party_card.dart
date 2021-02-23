@@ -20,21 +20,26 @@ class PartyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 20.0),
-      height: screenHeight / 5,
-      width: screenWidth,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15.0),
-        color: kDarkGreen,
-        boxShadow: [shadow],
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          PartyCardTopDetail(),
-          PartyCardBottomDetail(cardWidth: cardWidth, cardHeight: cardHeight)
-        ],
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, 'detail_screen');
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 20.0),
+        height: screenHeight / 5,
+        width: screenWidth,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(15.0),
+          color: kDarkGreen,
+          boxShadow: [shadow],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            PartyCardTopDetail(),
+            PartyCardBottomDetail(cardWidth: cardWidth, cardHeight: cardHeight)
+          ],
+        ),
       ),
     );
   }
