@@ -16,6 +16,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Party> parties;
+  bool _loading = true;
 
   @override
   void initState() {
@@ -33,6 +34,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .toList();
     setState(() {
       this.parties = parties;
+      _loading = false;
     });
   }
 
@@ -62,20 +64,27 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Container(
                 height: screenHeight * 0.75,
-                child: ListView.separated(
-                  itemBuilder: (_, index) => PartyCard(
-                    screenHeight: screenHeight,
-                    screenWidth: screenWidth,
-                    cardWidth: cardWidth,
-                    cardHeight: cardHeight,
-                    party: parties[index],
-                  ),
-                  separatorBuilder: (context, index) => TimelineTitle(
-                    screenWidth: screenWidth,
-                    text: "Friday, 12 March",
-                  ),
-                  itemCount: parties.length,
-                ),
+                child: _loading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(kLightTheme),
+                        ),
+                      )
+                    : ListView.separated(
+                        itemBuilder: (_, index) => PartyCard(
+                          screenHeight: screenHeight,
+                          screenWidth: screenWidth,
+                          cardWidth: cardWidth,
+                          cardHeight: cardHeight,
+                          party: parties[index],
+                        ),
+                        separatorBuilder: (context, index) => TimelineTitle(
+                          screenWidth: screenWidth,
+                          text: "Friday, 12 March",
+                        ),
+                        itemCount: parties.length,
+                      ),
               ),
             ],
           ),

@@ -8,24 +8,27 @@ class Party {
   String location;
   bool invitationSent;
   List<Person> _partyInvitees;
+  String imageLink;
 
-  Party({
-    this.id,
-    this.name,
-    this.description,
-    this.dateTime,
-    this.location,
-    this.invitationSent,
-  });
+  Party(
+      {this.id,
+      this.name,
+      this.description,
+      this.dateTime,
+      this.location,
+      this.invitationSent,
+      this.imageLink});
 
   factory Party.fromJson(Map<String, dynamic> json) {
     return Party(
-        id: json["id"],
-        name: json["name"],
-        description: json["description"],
-        dateTime: json['dateTime'],
-        location: json['location'],
-        invitationSent: json['invitationSent']);
+      id: json["id"],
+      name: json["name"],
+      description: json["description"],
+      dateTime: json['dateTime'],
+      location: json['location'],
+      invitationSent: json['invitationSent'],
+      imageLink: json['imageLink'],
+    );
   }
 
   List<Person> partyInvitees() {

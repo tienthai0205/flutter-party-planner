@@ -30,3 +30,11 @@ BoxShadow shadow = BoxShadow(
   blurRadius: 5,
   offset: Offset(0, 3), // changes position of shadow
 );
+
+const iconList = [
+  "assets/icons/baloon_icon.svg",
+  "assets/icons/champagne_icon.svg",
+  "assets/icons/dancing_icon.svg"
+];
+const String imagePlaceholder =
+    "https://images.unsplash.com/photo-1496843916299-590492c751f4?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1651&q=80";

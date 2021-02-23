@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:party_planner/constants.dart';
 
 class RoundedButton3Sides extends StatelessWidget {
-  const RoundedButton3Sides({Key key, this.text, this.onPress})
+  const RoundedButton3Sides({Key key, this.text, this.onPress, this.side})
       : super(key: key);
 
   final String text;
   final Function onPress;
+  final String side;
 
   @override
   Widget build(BuildContext context) {
@@ -17,11 +19,12 @@ class RoundedButton3Sides extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(22),
-            topRight: Radius.circular(22),
+            topRight: side == 'top' ? Radius.zero : Radius.circular(22),
             bottomRight: Radius.circular(22),
+            bottomLeft: side == 'bottom' ? Radius.zero : Radius.circular(22),
           ),
         ),
-        color: Color(0xff6F6F6F),
+        color: side == 'bottom' ? Color(0xff6F6F6F) : kYellowTheme,
       ),
     );
   }

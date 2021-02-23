@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
@@ -62,6 +63,9 @@ class PartyCardTopDetail extends StatelessWidget {
   final Party party;
   @override
   Widget build(BuildContext context) {
+    int randomIconIndex = new Random().nextInt(3);
+    String iconPath = iconList[randomIconIndex];
+
     return Expanded(
       child: Container(
         margin: EdgeInsets.all(8.0),
@@ -84,7 +88,7 @@ class PartyCardTopDetail extends StatelessWidget {
             ),
             Align(
               alignment: Alignment.centerLeft,
-              child: SvgPicture.asset("assets/icons/baloon_icon.svg"),
+              child: SvgPicture.asset(iconPath),
             )
           ],
         ),

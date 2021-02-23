@@ -62,6 +62,7 @@ class PartyDetailView extends StatelessWidget {
               RoundedButton3Sides(
                 text: "Cancle",
                 onPress: () {},
+                side: 'bottom',
               ),
               SizedBox(
                 width: 10,
@@ -69,6 +70,7 @@ class PartyDetailView extends StatelessWidget {
               RoundedButton3Sides(
                 text: "Save",
                 onPress: () {},
+                side: 'top',
               ),
             ],
           )

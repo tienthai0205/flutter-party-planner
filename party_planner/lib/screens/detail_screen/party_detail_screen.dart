@@ -16,7 +16,8 @@ class PartyDetailScreem extends StatelessWidget {
       body: Stack(
         alignment: Alignment.center,
         children: [
-          PartyHeroImage(screenHeight: screenHeight),
+          PartyHeroImage(
+              screenHeight: screenHeight, imageLink: party.imageLink),
           Align(
             alignment: Alignment.topLeft,
             child: SafeArea(
