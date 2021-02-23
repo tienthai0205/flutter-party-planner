@@ -16,7 +16,7 @@ dependencies:
   google_fonts: ^1.1.2
   flutter_svg: any
   dotted_line: ^2.0.2
-
+  grouped_list: ^3.7.1
 
   cupertino_icons: ^1.0.0
 

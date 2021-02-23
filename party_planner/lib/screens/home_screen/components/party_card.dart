@@ -111,6 +111,8 @@ class PartyCardBottomDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    DateTime partyTime = DateTime.parse(party.dateTime);
+    String time = ' ${partyTime.hour} : ${partyTime.minute}0';
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -133,7 +135,7 @@ class PartyCardBottomDetail extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  party.dateTime,
+                  time,
                   style: kfontSecondary.copyWith(fontWeight: FontWeight.bold),
                 ),
               )
