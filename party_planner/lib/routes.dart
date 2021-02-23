@@ -7,4 +7,5 @@ Map routes = <String, WidgetBuilder>{
   'splash_screen': (BuildContext context) => LandingScreen(),
   'home_screen': (BuildContext context) => HomeScreen(),
   'detail_screen': (BuildContext context) => PartyDetailScreem(),
+  'new_party': (BuildContext context) => PartyDetailScreem(),
 };

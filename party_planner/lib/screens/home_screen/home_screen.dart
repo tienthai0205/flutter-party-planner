@@ -56,40 +56,66 @@ class _HomeScreenState extends State<HomeScreen> {
               // border: Border.all(color: Colors.red),
               ),
           width: screenWidth,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Stack(
             children: [
-              Text(
-                "Hi Gerralt!",
-                style: kHeading,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Hi Gerralt!",
+                    style: kHeading,
+                  ),
+                  Container(
+                    height: screenHeight * 0.75,
+                    child: _loading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(kLightTheme),
+                            ),
+                          )
+                        : GroupedListView(
+                            elements: parties,
+                            groupBy: (Party party) =>
+                                groupEventByDate(timeStamp: party.dateTime),
+                            itemBuilder: (_, element) => PartyCard(
+                              screenHeight: screenHeight,
+                              screenWidth: screenWidth,
+                              cardWidth: cardWidth,
+                              cardHeight: cardHeight,
+                              party: element,
+                            ),
+                            groupSeparatorBuilder: (value) => TimelineTitle(
+                              screenWidth: screenWidth,
+                              text: value,
+                            ),
+                          ),
+                  ),
+                ],
               ),
-              Container(
-                height: screenHeight * 0.75,
-                child: _loading
-                    ? Center(
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(kLightTheme),
-                        ),
-                      )
-                    : GroupedListView(
-                        elements: parties,
-                        groupBy: (Party party) =>
-                            groupEventByDate(timeStamp: party.dateTime),
-                        itemBuilder: (_, element) => PartyCard(
-                          screenHeight: screenHeight,
-                          screenWidth: screenWidth,
-                          cardWidth: cardWidth,
-                          cardHeight: cardHeight,
-                          party: element,
-                        ),
-                        groupSeparatorBuilder: (value) => TimelineTitle(
-                          screenWidth: screenWidth,
-                          text: value,
-                        ),
-                      ),
-              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  decoration: const BoxDecoration(
+                    color: kLightPinkTheme,
+                    shape: BoxShape.circle,
+                    boxShadow: [shadow],
+                  ),
+                  width: screenWidth * 0.18,
+                  height: screenWidth * 0.18,
+                  child: IconButton(
+                    icon: Icon(
+                      Icons.add,
+                      size: screenWidth * 0.15,
+                    ),
+                    color: kDarkTheme,
+                    onPressed: () {
+                      Navigator.pushNamed(context, 'new_party');
+                    },
+                  ),
+                ),
+              )
             ],
           ),
         ),

@@ -81,6 +81,20 @@ class PartyCardTopDetail extends StatelessWidget {
               ),
             ),
             Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                icon: party.invitationSent
+                    ? Icon(
+                        Icons.check_circle_outline,
+                      )
+                    : SvgPicture.asset(
+                        "assets/icons/send_invite_icon.svg",
+                        color: kYellowTheme,
+                      ),
+                onPressed: () {},
+              ),
+            ),
+            Align(
               alignment: Alignment.bottomRight,
               child: Text(
                 '${party.numberOfInvitees} people are going',

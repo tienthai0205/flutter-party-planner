@@ -25,7 +25,7 @@ TextStyle kHeading3 =
     GoogleFonts.nunito(color: kLightTheme, fontSize: ktextsm2);
 TextStyle kfont = TextStyle(fontFamily: 'Galvji');
 TextStyle kfontSecondary = GoogleFonts.nunito();
-BoxShadow shadow = BoxShadow(
+const BoxShadow shadow = BoxShadow(
   color: Color(0xff1D1D1D),
   blurRadius: 5,
   offset: Offset(0, 3), // changes position of shadow

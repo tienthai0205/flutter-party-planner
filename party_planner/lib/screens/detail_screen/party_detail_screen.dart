@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:party_planner/constants.dart';
 import 'package:party_planner/models/party.dart';
+import 'package:party_planner/screens/detail_screen/components/party_edit_view.dart';
 
 import 'components/hero_image.dart';
 import 'components/party_detail_view.dart';
@@ -13,11 +14,13 @@ class PartyDetailScreem extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         alignment: Alignment.center,
         children: [
           PartyHeroImage(
-              screenHeight: screenHeight, imageLink: party.imageLink),
+              screenHeight: screenHeight,
+              imageLink: party != null ? party.imageLink : null),
           Align(
             alignment: Alignment.topLeft,
             child: SafeArea(
@@ -39,7 +42,7 @@ class PartyDetailScreem extends StatelessWidget {
             child: PartyDetailWrapper(
                 screenHeight: screenHeight,
                 screenWidth: screenWidth,
-                party: party),
+                party: party != null ? party : null),
           ),
         ],
       ),
@@ -76,8 +79,12 @@ class PartyDetailWrapper extends StatelessWidget {
           color: kDarkTheme),
       height: screenHeight * 0.7,
       width: screenWidth,
-      child: PartyDetailView(
-          screenWidth: screenWidth, screenHeight: screenHeight, party: party),
+      child: party != null
+          ? PartyDetailView(
+              screenWidth: screenWidth,
+              screenHeight: screenHeight,
+              party: party)
+          : PartyEditView(screenWidth: screenWidth, screenHeight: screenHeight),
     );
   }
 }

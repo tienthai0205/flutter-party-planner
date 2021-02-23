@@ -34,7 +34,7 @@ class InviteesListView extends StatelessWidget {
                 color: Color(0xffE84A5F),
               ),
             ),
-            itemCount: 10,
+            itemCount: 5,
           ),
         ),
       ],

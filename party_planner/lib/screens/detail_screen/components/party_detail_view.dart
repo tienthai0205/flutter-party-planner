@@ -21,7 +21,10 @@ class PartyDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    DateTime partyDateTime = DateTime.parse(party.dateTime);
+    DateTime partyDateTime;
+    if (party != null) {
+      partyDateTime = DateTime.parse(party.dateTime);
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
       child: Column(
@@ -33,29 +36,29 @@ class PartyDetailView extends StatelessWidget {
             style: kHeading.copyWith(fontSize: 20),
           ),
           Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              color: kYellowTheme,
-            ),
-            width: screenWidth * 0.7,
-            child: ListTile(
-              title: Text(
-                party.location,
-                style: kfontSecondary.copyWith(
-                    fontWeight: FontWeight.w700, fontSize: ktextsm2),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8),
+                color: kYellowTheme,
               ),
-              leading: Icon(
-                Icons.location_on,
-                color: kDarkTheme,
-              ),
-            ),
-          ),
+              width: screenWidth * 0.7,
+              child: ListTile(
+                title: Text(
+                  party.location,
+                  style: kfontSecondary.copyWith(
+                      fontWeight: FontWeight.w700, fontSize: ktextsm2),
+                ),
+                leading: Icon(
+                  Icons.location_on,
+                  color: kDarkTheme,
+                ),
+              )),
           PartyDetailTimeCard(
-              time: DateFormat.Hm().format(partyDateTime),
-              date: DateFormat.yMd().format(partyDateTime)),
+            time: DateFormat.Hm().format(partyDateTime),
+            date: DateFormat.yMd().format(partyDateTime),
+          ),
           Container(
             child: Text(
-              party.description,
+              party != null ? party.description : '',
               style: kfontSecondary.copyWith(color: kLightTheme),
             ),
           ),
