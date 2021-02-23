@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:party_planner/models/party.dart';
 import 'package:party_planner/screens/detail_screen/components/party_time_card.dart';
 import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
 
@@ -10,10 +11,12 @@ class PartyDetailView extends StatelessWidget {
     Key key,
     @required this.screenWidth,
     @required this.screenHeight,
+    @required this.party,
   }) : super(key: key);
 
   final double screenWidth;
   final double screenHeight;
+  final Party party;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +27,7 @@ class PartyDetailView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text(
-            "Champagne Lux Sips",
+            party.name,
             style: kHeading.copyWith(fontSize: 20),
           ),
           Container(
@@ -35,7 +38,7 @@ class PartyDetailView extends StatelessWidget {
             width: screenWidth * 0.7,
             child: ListTile(
               title: Text(
-                "3 Beverly Hills,  LA",
+                party.location,
                 style: kfontSecondary.copyWith(
                     fontWeight: FontWeight.w700, fontSize: ktextsm2),
               ),
@@ -48,7 +51,7 @@ class PartyDetailView extends StatelessWidget {
           PartyDetailTimeCard(),
           Container(
             child: Text(
-              "Join this amazing party where we have awesome music with special guests none other than: Mike Music, Sandra Song, Billy Boombox and Cara Caraoke!",
+              party.description,
               style: kfontSecondary.copyWith(color: kLightTheme),
             ),
           ),

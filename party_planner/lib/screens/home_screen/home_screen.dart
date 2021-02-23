@@ -8,7 +8,6 @@ import 'package:http/http.dart' as http;
 
 import 'components/party_card.dart';
 import 'components/timeline_title.dart';
-import 'package:party_planner/services/network.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -65,10 +64,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: screenHeight * 0.75,
                 child: ListView.separated(
                   itemBuilder: (_, index) => PartyCard(
-                      screenHeight: screenHeight,
-                      screenWidth: screenWidth,
-                      cardWidth: cardWidth,
-                      cardHeight: cardHeight),
+                    screenHeight: screenHeight,
+                    screenWidth: screenWidth,
+                    cardWidth: cardWidth,
+                    cardHeight: cardHeight,
+                    party: parties[index],
+                  ),
                   separatorBuilder: (context, index) => TimelineTitle(
                     screenWidth: screenWidth,
                     text: "Friday, 12 March",

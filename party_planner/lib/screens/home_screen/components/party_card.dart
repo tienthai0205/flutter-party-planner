@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dotted_line/dotted_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:party_planner/models/party.dart';
 
 import '../../../constants.dart';
 
@@ -11,18 +14,20 @@ class PartyCard extends StatelessWidget {
     @required this.screenWidth,
     @required this.cardWidth,
     @required this.cardHeight,
+    @required this.party,
   }) : super(key: key);
 
   final double screenHeight;
   final double screenWidth;
   final double cardWidth;
   final double cardHeight;
+  final Party party;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'detail_screen');
+        Navigator.pushNamed(context, 'detail_screen', arguments: party);
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0),
@@ -36,8 +41,14 @@ class PartyCard extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            PartyCardTopDetail(),
-            PartyCardBottomDetail(cardWidth: cardWidth, cardHeight: cardHeight)
+            PartyCardTopDetail(
+              party: party,
+            ),
+            PartyCardBottomDetail(
+              cardWidth: cardWidth,
+              cardHeight: cardHeight,
+              party: party,
+            )
           ],
         ),
       ),
@@ -46,10 +57,9 @@ class PartyCard extends StatelessWidget {
 }
 
 class PartyCardTopDetail extends StatelessWidget {
-  const PartyCardTopDetail({
-    Key key,
-  }) : super(key: key);
+  const PartyCardTopDetail({Key key, this.party}) : super(key: key);
 
+  final Party party;
   @override
   Widget build(BuildContext context) {
     return Expanded(
@@ -61,7 +71,7 @@ class PartyCardTopDetail extends StatelessWidget {
             Align(
               alignment: Alignment.topCenter,
               child: Text(
-                "The RnB Party",
+                party.name,
                 style: kHeading.copyWith(fontSize: 15.0),
               ),
             ),
@@ -84,14 +94,16 @@ class PartyCardTopDetail extends StatelessWidget {
 }
 
 class PartyCardBottomDetail extends StatelessWidget {
-  const PartyCardBottomDetail({
-    Key key,
-    @required this.cardWidth,
-    @required this.cardHeight,
-  }) : super(key: key);
+  const PartyCardBottomDetail(
+      {Key key,
+      @required this.cardWidth,
+      @required this.cardHeight,
+      @HttpStatus.paymentRequired this.party})
+      : super(key: key);
 
   final double cardWidth;
   final double cardHeight;
+  final Party party;
 
   @override
   Widget build(BuildContext context) {
@@ -117,7 +129,7 @@ class PartyCardBottomDetail extends StatelessWidget {
               Expanded(
                 flex: 2,
                 child: Text(
-                  "21:00",
+                  party.dateTime,
                   style: kfontSecondary.copyWith(fontWeight: FontWeight.bold),
                 ),
               )
@@ -150,7 +162,7 @@ class PartyCardBottomDetail extends StatelessWidget {
                 Expanded(
                   flex: 2,
                   child: Text(
-                    "3 Beverly Hills, LA",
+                    party.location,
                     style: kfontSecondary.copyWith(fontWeight: FontWeight.bold),
                   ),
                 )

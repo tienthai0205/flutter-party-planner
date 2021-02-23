@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:party_planner/constants.dart';
+import 'package:party_planner/models/party.dart';
 
 import 'components/hero_image.dart';
 import 'components/party_detail_view.dart';
@@ -7,6 +8,8 @@ import 'components/party_detail_view.dart';
 class PartyDetailScreem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final Party party = ModalRoute.of(context).settings.arguments;
+
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
@@ -33,7 +36,9 @@ class PartyDetailScreem extends StatelessWidget {
           Align(
             alignment: Alignment.bottomCenter,
             child: PartyDetailWrapper(
-                screenHeight: screenHeight, screenWidth: screenWidth),
+                screenHeight: screenHeight,
+                screenWidth: screenWidth,
+                party: party),
           ),
         ],
       ),
@@ -46,10 +51,12 @@ class PartyDetailWrapper extends StatelessWidget {
     Key key,
     @required this.screenHeight,
     @required this.screenWidth,
+    @required this.party,
   }) : super(key: key);
 
   final double screenHeight;
   final double screenWidth;
+  final Party party;
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +75,8 @@ class PartyDetailWrapper extends StatelessWidget {
           color: kDarkTheme),
       height: screenHeight * 0.7,
       width: screenWidth,
-      child:
-          PartyDetailView(screenWidth: screenWidth, screenHeight: screenHeight),
+      child: PartyDetailView(
+          screenWidth: screenWidth, screenHeight: screenHeight, party: party),
     );
   }
 }
