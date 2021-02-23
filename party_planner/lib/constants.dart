@@ -37,4 +37,4 @@ const iconList = [
   "assets/icons/dancing_icon.svg"
 ];
 const String imagePlaceholder =
-    "https://images.unsplash.com/photo-1496843916299-590492c751f4?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1651&q=80";
+    "https://images.unsplash.com/photo-1486556396467-d83d2b23514b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
