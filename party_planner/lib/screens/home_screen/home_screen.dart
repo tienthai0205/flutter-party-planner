@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:party_planner/constants.dart';
+import 'package:party_planner/models/party.dart';
+import 'package:http/http.dart' as http;
 
 import 'components/party_card.dart';
 import 'components/timeline_title.dart';
+import 'package:party_planner/services/network.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,6 +16,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<Party> parties;
+
+  @override
+  void initState() {
+    super.initState();
+    parties = new List<Party>();
+    _fetchParties();
+  }
+
+  void _fetchParties() async {
+    const url =
+        "https://my-json-server.typicode.com/tienthai460592/faker/parties";
+    final response = await http.get(url);
+    parties = (jsonDecode(response.body) as List)
+        .map((data) => new Party.fromJson(data))
+        .toList();
+    setState(() {
+      this.parties = parties;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -47,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     screenWidth: screenWidth,
                     text: "Friday, 12 March",
                   ),
-                  itemCount: 10,
+                  itemCount: parties.length,
                 ),
               ),
             ],

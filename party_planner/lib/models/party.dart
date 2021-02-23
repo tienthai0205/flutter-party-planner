@@ -1,27 +1,32 @@
 import 'package:party_planner/models/person.dart';
 
 class Party {
-  String name, description;
-  DateTime dateTime;
+  int id;
+  String name;
+  String description;
+  String dateTime;
   String location;
   bool invitationSent;
   List<Person> _partyInvitees;
 
   Party({
+    this.id,
+    this.name,
     this.description,
     this.dateTime,
     this.location,
     this.invitationSent,
   });
 
-  // factory Party.fromJson(Map<String, dynamic> json) {
-  //   return Party(
-  //     date: json['date'],
-  //     temperatureC: json['temperatureC'],
-  //     temperatureF: json['temperatureF'],
-  //     summary: json['summary'],
-  //   );
-  // }
+  factory Party.fromJson(Map<String, dynamic> json) {
+    return Party(
+        id: json["id"],
+        name: json["name"],
+        description: json["description"],
+        dateTime: json['dateTime'],
+        location: json['location'],
+        invitationSent: json['invitationSent']);
+  }
 
   List<Person> partyInvitees() {
     return _partyInvitees;

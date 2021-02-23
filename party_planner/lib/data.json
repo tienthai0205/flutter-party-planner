@@ -1,0 +1,8 @@
+
+{
+    "parties": [
+      { "id": 1, "name": "The RnB Party", "description": "", "dateTime": "", "location": ""},
+      { "id": 2, "name": "Champagne Lux Sips", "description": "Join this amazing party where we have awesome music with special guests none other than: Mike Music, Sandra Song, Billy Boombox and Cara Caraoke!", "dateTime": "2021-03-21T21:00:00Z", "location": "3 Beverly Hills, LA"},
+      { "id": 2, "name": "Champagne Lux Sips", "description": "Join this amazing party where we have awesome music with special guests none other than: Mike Music, Sandra Song, Billy Boombox and Cara Caraoke!", "dateTime": "2021-03-21T21:00:00Z", "location": "3 Beverly Hills, LA"}
+    ]
+}
