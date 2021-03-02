@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:party_planner/models/person.dart';
 import 'package:party_planner/services/helper.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:party_planner/models/party.dart';
@@ -367,7 +368,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                   onPressed: () {
                     setState(() {
                       currentContact = contact;
-                      addInviteeToList(party);
+                      _inviteDialog(party);
                     });
                   },
                 ),
@@ -379,14 +380,51 @@ class _PartyEditViewState extends State<PartyEditView> {
     );
   }
 
-  void addInviteeToList(Party party) {
+  void addInviteeToList(Party party, BuildContext context) {
     print(currentContact.displayName);
     String email = currentContact.emails.elementAt(0).value;
     String phone = currentContact.phones.elementAt(0).value;
-    print(email);
+    Uri _emailLaunchUri = Uri(
+        scheme: 'mailto',
+        path: email,
+        queryParameters: {'subject': 'Invitation to ${party.name} party!'});
+    launch(_emailLaunchUri.toString());
     Person newInvitee = new Person(
         name: currentContact.displayName, email: email, phoneNumber: phone);
     print("current party is ${party.name}");
-    Helper().addInviteeToParty(party, newInvitee);
+    setState(() {
+      Helper().addInviteeToParty(party, newInvitee);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    });
+  }
+
+  Future<void> _inviteDialog(Party party) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Send invite to ${currentContact.givenName}?'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(
+                    'This mean an email will be sent to ${currentContact.emails.first.value}'),
+                Text('Would you like to proceed with the invitation?'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Send'),
+              onPressed: () {
+                addInviteeToList(party, context);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

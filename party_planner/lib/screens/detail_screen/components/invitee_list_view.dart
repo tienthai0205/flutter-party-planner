@@ -4,7 +4,6 @@ import 'package:party_planner/models/party.dart';
 import 'package:party_planner/models/person.dart';
 import 'package:party_planner/services/helper.dart';
 import '../../../constants.dart';
-import 'package:contacts_service/contacts_service.dart';
 
 class InviteesListView extends StatefulWidget {
   const InviteesListView({Key key, @required this.screenHeight, this.party})
@@ -38,7 +37,7 @@ class _InviteesListViewState extends State<InviteesListView> {
         ),
         Container(
             height: widget.party != null && widget.party.invitationSent
-                ? widget.party.numberOfInvitees * (widget.screenHeight / 15)
+                ? widget.screenHeight / 6
                 : 10.0,
             child: widget.party != null
                 ? ListView.builder(
