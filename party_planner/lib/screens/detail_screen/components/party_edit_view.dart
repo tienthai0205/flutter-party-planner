@@ -249,6 +249,7 @@ class _PartyEditViewState extends State<PartyEditView> {
   }
 
   void updateParty(Party party) {
+    _formKey.currentState.save();
     print(party.id);
     String isoFormat;
     // if (selectedDate != null && selectedTime == null) {
