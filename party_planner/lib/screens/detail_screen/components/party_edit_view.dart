@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:party_planner/models/person.dart';
 import 'package:party_planner/services/helper.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:party_planner/models/party.dart';
@@ -33,6 +36,8 @@ class _PartyEditViewState extends State<PartyEditView> {
   String partyName;
   String description;
   Position location;
+  Iterable<Contact> _contacts;
+  Contact currentContact;
 
   @override
   Widget build(BuildContext context) {
@@ -167,6 +172,20 @@ class _PartyEditViewState extends State<PartyEditView> {
                     screenHeight: widget.screenHeight,
                     party: party != null ? party : null,
                   ),
+                  TextField(
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: "new invitee",
+                      hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
+                      suffixIcon: IconButton(
+                        onPressed: () => newInvite(party),
+                        icon: Icon(
+                          Icons.add_circle_outline,
+                          color: kLightPinkTheme,
+                        ),
+                      ),
+                    ),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -289,5 +308,84 @@ class _PartyEditViewState extends State<PartyEditView> {
           location = new Position(
               latitude: value.latitude, longitude: value.longitude);
         }));
+  }
+
+  void newInvite(Party party) async {
+    PermissionStatus permision = await _getPermission();
+    if (permision == PermissionStatus.granted) {
+      getContacts(party);
+    } else {
+      _getPermission();
+    }
+  }
+
+  Future<void> getContacts(Party party) async {
+    final Iterable<Contact> contacts = await ContactsService.getContacts();
+    setState(() {
+      _contacts = contacts;
+      _openInviteBottomSheet(context, party);
+    });
+  }
+
+  Future<PermissionStatus> _getPermission() async {
+    final PermissionStatus permission = await Permission.contacts.status;
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.denied) {
+      final Map<Permission, PermissionStatus> permissionStatus =
+          await [Permission.contacts].request();
+      return permissionStatus[Permission.contacts] ??
+          PermissionStatus.undetermined;
+    } else {
+      return permission;
+    }
+  }
+
+  void _openInviteBottomSheet(context, party) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: ListView.builder(
+            itemCount: _contacts?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              Contact contact = _contacts?.elementAt(index);
+              return ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                leading: (contact.avatar != null && contact.avatar.isNotEmpty)
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(contact.avatar),
+                      )
+                    : CircleAvatar(
+                        child: Text(contact.initials()),
+                        backgroundColor: Theme.of(context).accentColor,
+                      ),
+                title: Text(contact.displayName ?? ''),
+                trailing: IconButton(
+                  icon: Icon(Icons.add_circle, color: kDarkTheme),
+                  onPressed: () {
+                    setState(() {
+                      currentContact = contact;
+                      addInviteeToList(party);
+                    });
+                  },
+                ),
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void addInviteeToList(Party party) {
+    print(currentContact.displayName);
+    String email = currentContact.emails.elementAt(0).value;
+    String phone = currentContact.phones.elementAt(0).value;
+    print(email);
+    Person newInvitee = new Person(
+        name: currentContact.displayName, email: email, phoneNumber: phone);
+    print("current party is ${party.name}");
+    Helper().addInviteeToParty(party, newInvitee);
   }
 }

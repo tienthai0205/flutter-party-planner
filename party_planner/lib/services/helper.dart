@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:party_planner/models/party.dart';
+import 'package:party_planner/models/person.dart';
 
 import '../constants.dart';
 
@@ -22,7 +23,38 @@ class Helper {
     }
   }
 
+  void addInviteeToParty(Party party, Person person) {
+    party.addInviteeToParty(invitee: person);
+    List<dynamic> parties = file_data['parties'];
+
+    parties.forEach((element) {
+      if (element['id'] == party.id) {
+        element['invitees'] = party.partyInvitees;
+      }
+    });
+    print("Parties $parties");
+    file_data['parties'] = parties;
+
+    String jsonString = jsonEncode(file_data);
+    try {
+      filePath.writeAsString(jsonString);
+    } catch (e) {
+      print("Something went wrong $e");
+    }
+  }
+
   void deleteParty(String uuid) {}
+
+  void removeInvitee(Party party, Person person) {
+    party.partyInvitees.remove(person);
+    List<dynamic> parties = file_data['parties'];
+    Map<String, dynamic> updatedParty;
+    parties.forEach((element) {
+      if (element['id'] == party.id) {
+        element['invitees'] = party.partyInvitees;
+      }
+    });
+  }
 
   void addParty(Map<String, dynamic> json) async {
     String jsonString;
