@@ -7,7 +7,7 @@ class Party {
   String dateTime;
   String location;
   bool invitationSent;
-  List<Person> _partyInvitees = [];
+  List<Person> partyInvitees = [];
   String imageLink;
 
   Party(
@@ -17,7 +17,8 @@ class Party {
       this.dateTime,
       this.location,
       this.invitationSent,
-      this.imageLink});
+      this.imageLink,
+      this.partyInvitees});
 
   factory Party.fromJson(Map<String, dynamic> json) {
     return Party(
@@ -28,22 +29,23 @@ class Party {
       location: json['location'],
       invitationSent: json['invitationSent'],
       imageLink: json['imageLink'],
+      partyInvitees: (json['invitees'] as List)
+          .map(
+            (data) => new Person.fromJson(data),
+          )
+          .toList(),
     );
   }
 
-  List<Person> partyInvitees() {
-    return _partyInvitees;
-  }
-
   void addInviteeToParty({Person invitee}) {
-    _partyInvitees.add(invitee);
+    partyInvitees.add(invitee);
   }
 
   void removeInviteeFromParty({Person invitee}) {
-    _partyInvitees.remove(invitee);
+    partyInvitees.remove(invitee);
   }
 
   int get numberOfInvitees {
-    return _partyInvitees.length;
+    return partyInvitees != null ? partyInvitees.length : 0;
   }
 }

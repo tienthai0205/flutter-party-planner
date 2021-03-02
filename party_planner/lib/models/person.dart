@@ -11,14 +11,13 @@ class Person {
     this.phoneNumber,
   });
 
-  // factory Party.fromJson(Map<String, dynamic> json) {
-  //   return Party(
-  //     date: json['date'],
-  //     temperatureC: json['temperatureC'],
-  //     temperatureF: json['temperatureF'],
-  //     summary: json['summary'],
-  //   );
-  // }
+  factory Person.fromJson(Map<String, dynamic> json) {
+    return Person(
+      name: json['name'],
+      email: json['email'],
+      phoneNumber: json['phoneNumber'],
+    );
+  }
 
   List<Party> get listOfParties {
     return null;

@@ -142,7 +142,10 @@ class _PartyEditViewState extends State<PartyEditView> {
                       ),
                     ],
                   ),
-                  InviteesListView(screenHeight: widget.screenHeight),
+                  InviteesListView(
+                    screenHeight: widget.screenHeight,
+                    party: null,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

@@ -7,6 +7,7 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:party_planner/constants.dart';
 import 'package:party_planner/models/party.dart';
+import 'package:party_planner/models/person.dart';
 
 import 'components/party_card.dart';
 import 'components/timeline_title.dart';
@@ -18,6 +19,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<Party> parties;
+  List<Person> persons;
   bool _loading = true;
   String _jsonString;
 
@@ -50,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _fetchData() async {
     filePath = await localFile;
+    print(filePath);
     try {
       _jsonString = await filePath.readAsString();
 

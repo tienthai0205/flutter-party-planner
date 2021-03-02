@@ -62,7 +62,10 @@ class PartyDetailView extends StatelessWidget {
               style: kfontSecondary.copyWith(color: kLightTheme),
             ),
           ),
-          InviteesListView(screenHeight: screenHeight),
+          InviteesListView(
+            screenHeight: screenHeight,
+            party: party,
+          ),
         ],
       ),
     );

@@ -97,7 +97,9 @@ class PartyCardTopDetail extends StatelessWidget {
             Align(
               alignment: Alignment.bottomRight,
               child: Text(
-                '${party.numberOfInvitees} people are going',
+                party != null
+                    ? '${party.numberOfInvitees} people are going'
+                    : '0 people are going',
                 style: kfontSecondary.copyWith(color: kLightTheme),
               ),
             ),
