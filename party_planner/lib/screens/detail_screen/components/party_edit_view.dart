@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
+import 'package:party_planner/services/helper.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:party_planner/models/party.dart';
@@ -32,7 +33,6 @@ class _PartyEditViewState extends State<PartyEditView> {
   String partyName;
   String description;
   Position location;
-  String _jsonString;
 
   @override
   Widget build(BuildContext context) {
@@ -183,8 +183,13 @@ class _PartyEditViewState extends State<PartyEditView> {
                       RoundedButton3Sides(
                         text: "Save",
                         onPress: () {
-                          if (_formKey.currentState.validate()) {
+                          if (_formKey.currentState.validate() &&
+                              party == null) {
                             createParty();
+                            Navigator.pop(context);
+                          } else if (_formKey.currentState.validate() &&
+                              party != null) {
+                            updateParty(party);
                           }
                         },
                         side: 'top',
@@ -221,8 +226,39 @@ class _PartyEditViewState extends State<PartyEditView> {
       "imageLink": null,
       "invitees": []
     };
+    Helper().addParty(party);
+  }
 
-    _saveToFile(party);
+  void updateParty(Party party) {
+    print(party.id);
+    String isoFormat;
+    // if (selectedDate != null && selectedTime == null) {
+    //     DateTime dateTimeFormat = new DateTime(selectedDate.year, selectedDate.day, selectedDate.month);
+    //     isoFormat = dateTimeFormat.toIso8601String();
+    // } else if (selectedDate ==null && selectedTime != null){
+
+    // } else if {
+
+    // }
+
+    // print(party.partyInvitees);
+    print("Json encode ${json.encode(party.partyInvitees)}");
+    List inviteesList =
+        party.partyInvitees.map((invitee) => invitee.toJson()).toList();
+    Map<String, dynamic> updatedParty = {
+      "id": party.id,
+      "name": partyName != null ? partyName : party.name,
+      "description": description != null ? description : party.description,
+      "dateTime": isoFormat != null ? isoFormat : party.dateTime,
+      "location": {
+        "latitude": party.location.latitude,
+        "longitude": party.location.longitude
+      },
+      "invitationSent": party.invitationSent,
+      "imageLink": party.imageLink,
+      "invitees": inviteesList
+    };
+    Helper().modifyParty(updatedParty);
   }
 
   Future<Null> _selectDate(BuildContext context) async {
@@ -235,20 +271,6 @@ class _PartyEditViewState extends State<PartyEditView> {
       setState(() {
         selectedDate = picked;
       });
-  }
-
-  void _saveToFile(Map<String, dynamic> json) async {
-    Party _newParty = Party.fromJson(json);
-
-    file_data['parties'].add(json);
-
-    _jsonString = jsonEncode(file_data);
-    try {
-      filePath.writeAsString(_jsonString);
-      Navigator.pop(context);
-    } catch (e) {
-      print("Something went wrong $e");
-    }
   }
 
   Future<Null> _selectTime(BuildContext context) async {

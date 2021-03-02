@@ -18,6 +18,9 @@ class Person {
       phoneNumber: json['phoneNumber'],
     );
   }
+  Map<String, dynamic> toJson() {
+    return {"name": name, "email": email, "phoneNumber": phoneNumber};
+  }
 
   List<Party> get listOfParties {
     return null;
