@@ -10,6 +10,7 @@ const Color kYellowTheme = Color(0xffE4BC91);
 const Color kLightTheme = Color(0xffE5DED9);
 const Color kLightPinkTheme = Color(0xffFECEA8);
 const Color kDarkGreen = Color(0xff2A292D);
+const Color kPositive = Color(0xff00917c);
 const double ktextsm = 12;
 const double ktextsm2 = 16;
 const double ktextmd = 18;

@@ -7,9 +7,12 @@ import 'components/hero_image.dart';
 import 'components/party_detail_view.dart';
 
 class PartyDetailScreem extends StatelessWidget {
+  PartyDetailScreem({this.party, this.locationString});
+  final Party party;
+  final String locationString;
   @override
   Widget build(BuildContext context) {
-    final Party party = ModalRoute.of(context).settings.arguments;
+    // final Party party = ModalRoute.of(context).settings.arguments;
 
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
@@ -53,7 +56,8 @@ class PartyDetailScreem extends StatelessWidget {
                     ? PartyDetailView(
                         screenWidth: screenWidth,
                         screenHeight: screenHeight,
-                        party: party)
+                        party: party,
+                        locationString: locationString)
                     : PartyEditView(
                         screenWidth: screenWidth, screenHeight: screenHeight),
               ),

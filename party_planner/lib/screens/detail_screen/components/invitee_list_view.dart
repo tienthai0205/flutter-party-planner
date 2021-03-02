@@ -39,39 +39,37 @@ class _InviteesListViewState extends State<InviteesListView> {
             fontSize: 20,
           ),
         ),
-        widget.party != null
-            ? Container(
-                height: widget.screenHeight / 6,
-                child: ListView.builder(
-                  padding: EdgeInsets.all(0),
-                  itemBuilder: (_, index) => ListTile(
-                    title: Text(invitees[index].name),
-                    leading: SvgPicture.asset("assets/icons/profile_icon.svg"),
-                    trailing: Icon(
-                      Icons.cancel_outlined,
-                      color: Color(0xffE84A5F),
-                    ),
-                  ),
-                  itemCount: invitees.length,
-                ),
-              )
-            : Container(
-                padding: EdgeInsets.symmetric(vertical: 10.0),
-                child: TextField(
-                  decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "new invitee",
-                    hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
-                    suffixIcon: IconButton(
-                      onPressed: () => newInvite(),
-                      icon: Icon(
-                        Icons.add_circle_outline,
-                        color: kLightPinkTheme,
-                      ),
-                    ),
-                  ),
+        Container(
+          height: widget.party != null ? widget.screenHeight / 6 : 10.0,
+          child: ListView.builder(
+            padding: EdgeInsets.all(0),
+            itemBuilder: (_, index) => ListTile(
+              title: Text(invitees[index].name),
+              leading: SvgPicture.asset("assets/icons/profile_icon.svg"),
+              trailing: Icon(
+                Icons.cancel_outlined,
+                color: Color(0xffE84A5F),
+              ),
+            ),
+            itemCount: widget.party != null ? invitees.length : 0,
+          ),
+        ),
+        Container(
+          child: TextField(
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              hintText: "new invitee",
+              hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
+              suffixIcon: IconButton(
+                onPressed: () => newInvite(),
+                icon: Icon(
+                  Icons.add_circle_outline,
+                  color: kLightPinkTheme,
                 ),
               ),
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -107,59 +105,49 @@ class _InviteesListViewState extends State<InviteesListView> {
   }
 
   void _openInviteBottomSheet(context) {
-    PageController pageController = PageController();
-
     showModalBottomSheet(
-        context: context,
-        builder: (BuildContext bc) {
-          return PageView(
-            controller: pageController,
-            onPageChanged: (index) =>
-                {setState(() => currentContact = _contacts.elementAt(index))},
-            children: [
-              Container(
-                child: ListView.builder(
-                  itemCount: _contacts?.length ?? 0,
-                  itemBuilder: (BuildContext context, int index) {
-                    Contact contact = _contacts?.elementAt(index);
-                    return ListTile(
-                      onTap: () {
-                        setState(() {
-                          currentContact = contact;
-                          print(
-                              'set state current contact ${currentContact.givenName}');
-                        });
-                        if (currentContact != null) {
-                          pageController.nextPage(
-                              duration: Duration(milliseconds: 200),
-                              curve: Curves.ease);
-                        }
-                      },
-                      contentPadding: const EdgeInsets.symmetric(
-                          vertical: 2, horizontal: 18),
-                      leading: (contact.avatar != null &&
-                              contact.avatar.isNotEmpty)
-                          ? CircleAvatar(
-                              backgroundImage: MemoryImage(contact.avatar),
-                            )
-                          : CircleAvatar(
-                              child: Text(contact.initials()),
-                              backgroundColor: Theme.of(context).accentColor,
-                            ),
-                      title: Text(contact.displayName ?? ''),
-                    );
+      context: context,
+      builder: (BuildContext bc) {
+        return Container(
+          child: ListView.builder(
+            itemCount: _contacts?.length ?? 0,
+            itemBuilder: (BuildContext context, int index) {
+              Contact contact = _contacts?.elementAt(index);
+              return ListTile(
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
+                leading: (contact.avatar != null && contact.avatar.isNotEmpty)
+                    ? CircleAvatar(
+                        backgroundImage: MemoryImage(contact.avatar),
+                      )
+                    : CircleAvatar(
+                        child: Text(contact.initials()),
+                        backgroundColor: Theme.of(context).accentColor,
+                      ),
+                title: Text(contact.displayName ?? ''),
+                trailing: IconButton(
+                  icon: Icon(Icons.add_circle, color: kDarkTheme),
+                  onPressed: () {
+                    setState(() {
+                      currentContact = contact;
+                      addInviteeToList();
+                    });
                   },
                 ),
-              ),
-              Container(
-                child: Text(
-                    currentContact != null ? currentContact.givenName : ""),
-              )
-            ],
-          );
-        });
-    void onDataChange(Contact contact) {
-      setState(() => currentContact = contact);
-    }
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void addInviteeToList() {
+    String email = currentContact.emails.elementAt(0).value;
+    String phone = currentContact.phones.elementAt(0).value;
+    print(email);
+    Person newInvitee = new Person(
+        name: currentContact.displayName, email: email, phoneNumber: phone);
+    widget.party.addInviteeToParty(invitee: newInvitee);
   }
 }

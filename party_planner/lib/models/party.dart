@@ -1,3 +1,4 @@
+import 'package:geolocator/geolocator.dart';
 import 'package:party_planner/models/person.dart';
 
 class Party {
@@ -5,8 +6,7 @@ class Party {
   String name;
   String description;
   String dateTime;
-  String location;
-  bool invitationSent;
+  Position location;
   List<Person> partyInvitees = [];
   String imageLink;
 
@@ -16,18 +16,18 @@ class Party {
       this.description,
       this.dateTime,
       this.location,
-      this.invitationSent,
       this.imageLink,
       this.partyInvitees});
 
-  factory Party.fromJson(Map<String, dynamic> json) {
+  factory Party.fromJson(Map<dynamic, dynamic> json) {
     return Party(
       id: json["id"],
       name: json["name"],
       description: json["description"],
       dateTime: json['dateTime'],
-      location: json['location'],
-      invitationSent: json['invitationSent'],
+      location: new Position(
+          latitude: json['location']['latitude'],
+          longitude: json['location']['longitude']),
       imageLink: json['imageLink'],
       partyInvitees: (json['invitees'] as List)
           .map(
@@ -47,5 +47,9 @@ class Party {
 
   int get numberOfInvitees {
     return partyInvitees != null ? partyInvitees.length : 0;
+  }
+
+  bool get invitationSent {
+    return partyInvitees.length > 0 ? true : false;
   }
 }

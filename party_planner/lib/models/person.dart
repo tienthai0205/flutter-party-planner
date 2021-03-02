@@ -11,7 +11,7 @@ class Person {
     this.phoneNumber,
   });
 
-  factory Person.fromJson(Map<String, dynamic> json) {
+  factory Person.fromJson(Map<dynamic, dynamic> json) {
     return Person(
       name: json['name'],
       email: json['email'],

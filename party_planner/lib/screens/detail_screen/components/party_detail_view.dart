@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+
 import 'package:party_planner/models/party.dart';
 import 'package:party_planner/screens/detail_screen/components/party_time_card.dart';
-import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
-
 import '../../../constants.dart';
 import 'invitee_list_view.dart';
 
 class PartyDetailView extends StatelessWidget {
-  const PartyDetailView({
-    Key key,
-    @required this.screenWidth,
-    @required this.screenHeight,
-    @required this.party,
-  }) : super(key: key);
+  const PartyDetailView(
+      {Key key,
+      @required this.screenWidth,
+      @required this.screenHeight,
+      this.locationString,
+      @required this.party})
+      : super(key: key);
 
   final double screenWidth;
   final double screenHeight;
   final Party party;
+  final String locationString;
 
   @override
   Widget build(BuildContext context) {
@@ -31,9 +34,26 @@ class PartyDetailView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Text(
-            party.name,
-            style: kHeading.copyWith(fontSize: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                party.name,
+                style: kHeading.copyWith(fontSize: 20),
+              ),
+              IconButton(
+                icon: party.invitationSent
+                    ? Icon(
+                        Icons.check_circle_outline,
+                        color: kPositive,
+                      )
+                    : SvgPicture.asset(
+                        "assets/icons/send_invite_icon.svg",
+                        color: kYellowTheme,
+                      ),
+                onPressed: () {},
+              ),
+            ],
           ),
           Container(
               decoration: BoxDecoration(
@@ -42,8 +62,9 @@ class PartyDetailView extends StatelessWidget {
               ),
               width: screenWidth * 0.7,
               child: ListTile(
+                onTap: () => _determinePosition(),
                 title: Text(
-                  party.location,
+                  locationString,
                   style: kfontSecondary.copyWith(
                       fontWeight: FontWeight.w700, fontSize: ktextsm2),
                 ),
@@ -69,5 +90,32 @@ class PartyDetailView extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.deniedForever) {
+      return Future.error(
+          'Location permissions are permantly denied, we cannot request permissions.');
+    }
+
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission != LocationPermission.whileInUse &&
+          permission != LocationPermission.always) {
+        return Future.error(
+            'Location permissions are denied (actual value: $permission).');
+      }
+    }
+    Geolocator.getCurrentPosition().then((value) => print(value.toString()));
+    return await Geolocator.getCurrentPosition();
   }
 }

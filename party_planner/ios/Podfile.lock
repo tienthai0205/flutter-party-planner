@@ -1,33 +1,57 @@
 PODS:
   - contacts_service (0.2.2):
     - Flutter
+  - device_calendar (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - geocoding (1.0.5):
+    - Flutter
+  - geolocator (6.2.0):
+    - Flutter
   - path_provider (0.0.1):
     - Flutter
   - "permission_handler (5.1.0+2)":
     - Flutter
+  - url_launcher (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
   - contacts_service (from `.symlinks/plugins/contacts_service/ios`)
+  - device_calendar (from `.symlinks/plugins/device_calendar/ios`)
   - Flutter (from `Flutter`)
+  - geocoding (from `.symlinks/plugins/geocoding/ios`)
+  - geolocator (from `.symlinks/plugins/geolocator/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - permission_handler (from `.symlinks/plugins/permission_handler/ios`)
+  - url_launcher (from `.symlinks/plugins/url_launcher/ios`)
 
 EXTERNAL SOURCES:
   contacts_service:
     :path: ".symlinks/plugins/contacts_service/ios"
+  device_calendar:
+    :path: ".symlinks/plugins/device_calendar/ios"
   Flutter:
     :path: Flutter
+  geocoding:
+    :path: ".symlinks/plugins/geocoding/ios"
+  geolocator:
+    :path: ".symlinks/plugins/geolocator/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
   permission_handler:
     :path: ".symlinks/plugins/permission_handler/ios"
+  url_launcher:
+    :path: ".symlinks/plugins/url_launcher/ios"
 
 SPEC CHECKSUMS:
   contacts_service: 849e1f84281804c8bfbec1b4c3eedcb23c5d3eca
+  device_calendar: 23b28a5f1ab3bf77e34542fb1167e1b8b29a98f5
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  geocoding: 32cfcdb16d38d907caaba65e2e42ad10d38bee58
+  geolocator: f5e3de65e241caba7ce3e8a618803387bda73384
   path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
   permission_handler: ccb20a9fad0ee9b1314a52b70b76b473c5f8dab0
+  url_launcher: 6fef411d543ceb26efce54b05a0a40bfd74cbbef
 
 PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
 

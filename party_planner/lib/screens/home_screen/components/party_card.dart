@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 
 import 'package:dotted_line/dotted_line.dart';
@@ -6,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:party_planner/models/party.dart';
+import 'package:party_planner/screens/detail_screen/party_detail_screen.dart';
+import 'package:party_planner/services/location.dart';
 
 import '../../../constants.dart';
 
-class PartyCard extends StatelessWidget {
+class PartyCard extends StatefulWidget {
   const PartyCard({
     Key key,
     @required this.screenHeight,
@@ -26,15 +27,44 @@ class PartyCard extends StatelessWidget {
   final Party party;
 
   @override
+  _PartyCardState createState() => _PartyCardState();
+}
+
+class _PartyCardState extends State<PartyCard> {
+  String _currentAddress;
+
+  @override
+  void initState() {
+    super.initState();
+    getLocation();
+  }
+
+  void getLocation() {
+    LocationHelper()
+        .getAddressFromLatLng(widget.party.location)
+        .then((String data) => {
+              this.setState(() {
+                _currentAddress = data;
+              })
+            });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, 'detail_screen', arguments: party);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => new PartyDetailScreem(
+                party: widget.party, locationString: _currentAddress),
+          ),
+        );
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0),
-        height: screenHeight / 5,
-        width: screenWidth,
+        height: widget.screenHeight / 5,
+        width: widget.screenWidth,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(15.0),
           color: kDarkGreen,
@@ -44,13 +74,13 @@ class PartyCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             PartyCardTopDetail(
-              party: party,
+              party: widget.party,
             ),
             PartyCardBottomDetail(
-              cardWidth: cardWidth,
-              cardHeight: cardHeight,
-              party: party,
-            ),
+                cardWidth: widget.cardWidth,
+                cardHeight: widget.cardHeight,
+                party: widget.party,
+                locationString: _currentAddress),
           ],
         ),
       ),
@@ -86,6 +116,7 @@ class PartyCardTopDetail extends StatelessWidget {
                 icon: party.invitationSent
                     ? Icon(
                         Icons.check_circle_outline,
+                        color: kPositive,
                       )
                     : SvgPicture.asset(
                         "assets/icons/send_invite_icon.svg",
@@ -119,12 +150,14 @@ class PartyCardBottomDetail extends StatelessWidget {
       {Key key,
       @required this.cardWidth,
       @required this.cardHeight,
-      @HttpStatus.paymentRequired this.party})
+      this.locationString,
+      this.party})
       : super(key: key);
 
   final double cardWidth;
   final double cardHeight;
   final Party party;
+  final String locationString;
 
   @override
   Widget build(BuildContext context) {
@@ -184,10 +217,7 @@ class PartyCardBottomDetail extends StatelessWidget {
                 ),
                 Expanded(
                   flex: 2,
-                  child: Text(
-                    party.location,
-                    style: kfontSecondary.copyWith(fontWeight: FontWeight.bold),
-                  ),
+                  child: Text(locationString != null ? locationString : ""),
                 )
               ],
             ),
