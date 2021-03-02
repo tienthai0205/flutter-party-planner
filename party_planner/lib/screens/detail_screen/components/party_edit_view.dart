@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:uuid/uuid.dart';
 
@@ -30,7 +31,7 @@ class _PartyEditViewState extends State<PartyEditView> {
   final _formKey = GlobalKey<FormState>();
   String partyName;
   String description;
-  String location;
+  Position location;
   String _jsonString;
 
   @override
@@ -84,16 +85,20 @@ class _PartyEditViewState extends State<PartyEditView> {
                     ),
                     width: widget.screenWidth * 0.7,
                     child: TextFormField(
+                      onTap: () {
+                        getCurrentPosition();
+                      },
                       style: kHeading2.copyWith(color: kDarkTheme),
                       decoration: InputDecoration(
-                        hintText: "location",
+                        hintText: location != null
+                            ? "${location.latitude}, ${location.longitude}"
+                            : "location",
                         border: InputBorder.none,
                         icon: Icon(
                           Icons.location_on,
                           color: kDarkTheme,
                         ),
                       ),
-                      onSaved: (loc) => {location = loc},
                     ),
                   ),
                   Row(
@@ -190,9 +195,13 @@ class _PartyEditViewState extends State<PartyEditView> {
       "name": partyName,
       "description": description,
       "dateTime": isoFormat,
-      "location": location,
+      "location": {
+        "latitude": location.latitude,
+        "longitude": location.longitude
+      },
       "invitationSent": false,
-      "imageLink": null
+      "imageLink": null,
+      "invitees": []
     };
 
     _saveToFile(party);
@@ -233,5 +242,12 @@ class _PartyEditViewState extends State<PartyEditView> {
       setState(() {
         selectedTime = picked;
       });
+  }
+
+  getCurrentPosition() {
+    Geolocator.getCurrentPosition().then((value) => this.setState(() {
+          location = new Position(
+              latitude: value.latitude, longitude: value.longitude);
+        }));
   }
 }
