@@ -172,7 +172,9 @@ class _PartyEditViewState extends State<PartyEditView> {
                     children: [
                       RoundedButton3Sides(
                         text: "Cancle",
-                        onPress: () {},
+                        onPress: () {
+                          Navigator.pop(context);
+                        },
                         side: 'bottom',
                       ),
                       SizedBox(
