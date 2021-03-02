@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -19,25 +21,51 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<Party> parties;
   bool _loading = true;
+  String _jsonString;
 
   @override
   void initState() {
     super.initState();
     parties = new List<Party>();
-    _fetchParties();
+    // _fetchParties();
+    _fetchData();
   }
 
-  void _fetchParties() async {
-    const url =
-        "https://my-json-server.typicode.com/tienthai460592/faker/parties";
-    final response = await http.get(url);
-    parties = (jsonDecode(response.body) as List)
-        .map((data) => new Party.fromJson(data))
-        .toList();
+  // void _fetchParties() async {
+  //   const url =
+  //       "https://my-json-server.typicode.com/tienthai460592/faker/parties";
+  //   final response = await http.get(url);
+  //   parties = (jsonDecode(response.body) as List)
+  //       .map((data) => new Party.fromJson(data))
+  //       .toList();
+  //   setState(() {
+  //     this.parties = parties;
+  //     _loading = false;
+  //   });
+  // }
+
+  FutureOr onGoBack(dynamic value) {
     setState(() {
-      this.parties = parties;
-      _loading = false;
+      _fetchData();
     });
+  }
+
+  void _fetchData() async {
+    filePath = await localFile;
+    try {
+      _jsonString = await filePath.readAsString();
+
+      file_data = jsonDecode(_jsonString);
+      parties = (file_data['parties'] as List)
+          .map((data) => new Party.fromJson(data))
+          .toList();
+      setState(() {
+        this.parties = parties;
+        _loading = false;
+      });
+    } catch (e) {
+      print('Tried reading _file error: $e');
+    }
   }
 
   @override
@@ -111,7 +139,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     color: kDarkTheme,
                     onPressed: () {
-                      Navigator.pushNamed(context, 'new_party');
+                      Navigator.pushNamed(context, 'new_party').then(onGoBack);
                     },
                   ),
                 ),

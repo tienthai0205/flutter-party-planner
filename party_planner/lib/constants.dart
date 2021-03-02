@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'dart:ui';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,7 +32,7 @@ const BoxShadow shadow = BoxShadow(
   blurRadius: 5,
   offset: Offset(0, 3), // changes position of shadow
 );
-
+const url = "https://my-json-server.typicode.com/tienthai460592/faker/parties";
 const iconList = [
   "assets/icons/baloon_icon.svg",
   "assets/icons/champagne_icon.svg",
@@ -38,3 +40,15 @@ const iconList = [
 ];
 const String imagePlaceholder =
     "https://images.unsplash.com/photo-1486556396467-d83d2b23514b?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80";
+File filePath;
+Map<String, dynamic> file_data = {};
+
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+  return directory.path;
+}
+
+Future<File> get localFile async {
+  final path = await _localPath;
+  return File('$path/data');
+}

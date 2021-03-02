@@ -1,7 +1,7 @@
 import 'package:party_planner/models/person.dart';
 
 class Party {
-  int id;
+  String id;
   String name;
   String description;
   String dateTime;

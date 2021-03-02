@@ -1,4 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:uuid/uuid.dart';
+
+import 'package:party_planner/models/party.dart';
 import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
 
 import '../../../constants.dart';
@@ -19,8 +25,13 @@ class PartyEditView extends StatefulWidget {
 }
 
 class _PartyEditViewState extends State<PartyEditView> {
-  DateTime selectedDate = DateTime.now();
-  TimeOfDay selectedTime = TimeOfDay(hour: 12, minute: 0);
+  DateTime selectedDate;
+  TimeOfDay selectedTime;
+  final _formKey = GlobalKey<FormState>();
+  String partyName;
+  String description;
+  String location;
+  String _jsonString;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +41,7 @@ class _PartyEditViewState extends State<PartyEditView> {
         padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 25.0),
         child: SingleChildScrollView(
           child: Form(
+            key: _formKey,
             child: Container(
               height: widget.screenHeight * 0.75,
               child: Column(
@@ -49,9 +61,10 @@ class _PartyEditViewState extends State<PartyEditView> {
                         color: kLightTheme.withOpacity(0.5),
                       ),
                     ),
+                    onSaved: (name) => {partyName = name},
                   ),
                   TextFormField(
-                    style: kfontSecondary.copyWith(fontSize: ktextsm),
+                    style: kHeading2.copyWith(fontSize: ktextsm),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                           borderSide: BorderSide(color: kLightTheme)),
@@ -62,6 +75,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                         color: kLightTheme.withOpacity(0.5),
                       ),
                     ),
+                    onSaved: (desc) => {description = desc},
                   ),
                   Container(
                     decoration: BoxDecoration(
@@ -69,7 +83,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                       color: kYellowTheme,
                     ),
                     width: widget.screenWidth * 0.7,
-                    child: TextField(
+                    child: TextFormField(
                       style: kHeading2.copyWith(color: kDarkTheme),
                       decoration: InputDecoration(
                         hintText: "location",
@@ -79,6 +93,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                           color: kDarkTheme,
                         ),
                       ),
+                      onSaved: (loc) => {location = loc},
                     ),
                   ),
                   Row(
@@ -95,7 +110,9 @@ class _PartyEditViewState extends State<PartyEditView> {
                               _selectTime(context);
                             },
                             child: Text(
-                              "Time",
+                              selectedTime != null
+                                  ? "${selectedTime.format(context)}"
+                                  : "Time",
                               style: kHeading3,
                             ),
                           ),
@@ -115,7 +132,9 @@ class _PartyEditViewState extends State<PartyEditView> {
                               _selectDate(context);
                             },
                             child: Text(
-                              "Date",
+                              selectedDate != null
+                                  ? DateFormat.yMd().format(selectedDate)
+                                  : "Date",
                               style: kHeading3,
                             ),
                           ),
@@ -137,7 +156,11 @@ class _PartyEditViewState extends State<PartyEditView> {
                       ),
                       RoundedButton3Sides(
                         text: "Save",
-                        onPress: () {},
+                        onPress: () {
+                          if (_formKey.currentState.validate()) {
+                            createParty();
+                          }
+                        },
                         side: 'top',
                       ),
                     ],
@@ -151,16 +174,45 @@ class _PartyEditViewState extends State<PartyEditView> {
     );
   }
 
+  void createParty() {
+    _formKey.currentState.save();
+    var uuid = Uuid();
+    Map<String, dynamic> party = {
+      "id": uuid.v1(),
+      "name": partyName,
+      "description": description,
+      "dateTime": "2021-03-17T22:00:49+0100",
+      "location": location,
+      "invitationSent": false,
+      "imageLink": null
+    };
+    _saveToFile(party);
+  }
+
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: DateTime.now(),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
       });
+  }
+
+  void _saveToFile(Map<String, dynamic> json) async {
+    Party _newParty = Party.fromJson(json);
+
+    file_data['parties'].add(json);
+
+    _jsonString = jsonEncode(file_data);
+    try {
+      filePath.writeAsString(_jsonString);
+      Navigator.pop(context);
+    } catch (e) {
+      print("Something went wrong $e");
+    }
   }
 
   Future<Null> _selectTime(BuildContext context) async {
