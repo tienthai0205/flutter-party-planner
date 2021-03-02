@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     parties = new List<Party>();
     // _fetchParties();
+    // initFile();  //first time install
     _fetchData();
   }
 

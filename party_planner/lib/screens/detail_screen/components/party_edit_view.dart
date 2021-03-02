@@ -380,15 +380,21 @@ class _PartyEditViewState extends State<PartyEditView> {
     );
   }
 
-  void addInviteeToList(Party party, BuildContext context) {
+  void addInviteeToList(Party party, BuildContext context) async {
     print(currentContact.displayName);
     String email = currentContact.emails.elementAt(0).value;
     String phone = currentContact.phones.elementAt(0).value;
-    Uri _emailLaunchUri = Uri(
+    final Uri emailLaunchUri = Uri(
         scheme: 'mailto',
         path: email,
         queryParameters: {'subject': 'Invitation to ${party.name} party!'});
-    launch(_emailLaunchUri.toString());
+    var url = emailLaunchUri.toString();
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not send invite';
+    }
+
     Person newInvitee = new Person(
         name: currentContact.displayName, email: email, phoneNumber: phone);
     print("current party is ${party.name}");
