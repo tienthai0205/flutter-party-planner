@@ -177,15 +177,21 @@ class _PartyEditViewState extends State<PartyEditView> {
   void createParty() {
     _formKey.currentState.save();
     var uuid = Uuid();
+    print(DateFormat.yMd().format(selectedDate));
+    DateTime dateTimeFormat = new DateTime(selectedDate.year, selectedDate.day,
+        selectedDate.month, selectedTime.hour, selectedTime.minute);
+    String isoFormat = dateTimeFormat.toIso8601String();
+    print(isoFormat);
     Map<String, dynamic> party = {
       "id": uuid.v1(),
       "name": partyName,
       "description": description,
-      "dateTime": "2021-03-17T22:00:49+0100",
+      "dateTime": isoFormat,
       "location": location,
       "invitationSent": false,
       "imageLink": null
     };
+
     _saveToFile(party);
   }
 

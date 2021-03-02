@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -8,7 +7,6 @@ import 'package:grouped_list/grouped_list.dart';
 import 'package:intl/intl.dart';
 import 'package:party_planner/constants.dart';
 import 'package:party_planner/models/party.dart';
-import 'package:http/http.dart' as http;
 
 import 'components/party_card.dart';
 import 'components/timeline_title.dart';
@@ -114,6 +112,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               cardHeight: cardHeight,
                               party: element,
                             ),
+                            groupComparator: (gr1, gr2) =>
+                                groupEventsOrder(gr1, gr2),
                             groupSeparatorBuilder: (value) => TimelineTitle(
                               screenWidth: screenWidth,
                               text: value,
@@ -157,5 +157,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
     dateSlug = DateFormat.yMMMMEEEEd().format(partyTimeStamp);
     return dateSlug;
+  }
+
+  int groupEventsOrder(String gr1, String gr2) {
+    final formatter = DateFormat(r'EEEE, MMMM dd, yyyy');
+
+    DateTime gr1Time = formatter.parse(gr1);
+    DateTime gr2Time = formatter.parse(gr2);
+    return gr1Time.compareTo(gr2Time);
   }
 }
