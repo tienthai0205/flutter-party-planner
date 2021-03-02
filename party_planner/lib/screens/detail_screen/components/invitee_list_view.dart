@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:party_planner/models/party.dart';
 import 'package:party_planner/models/person.dart';
+import 'package:party_planner/services/helper.dart';
 import '../../../constants.dart';
 import 'package:contacts_service/contacts_service.dart';
 
@@ -46,9 +47,14 @@ class _InviteesListViewState extends State<InviteesListView> {
                       title: Text(invitees[index].name),
                       leading:
                           SvgPicture.asset("assets/icons/profile_icon.svg"),
-                      trailing: Icon(
-                        Icons.cancel_outlined,
-                        color: Color(0xffE84A5F),
+                      trailing: IconButton(
+                        icon: Icon(
+                          Icons.cancel_outlined,
+                          color: Color(0xffE84A5F),
+                        ),
+                        onPressed: () {
+                          Helper().removeInvitee(widget.party, invitees[index]);
+                        },
                       ),
                     ),
                     itemCount: invitees.length,
