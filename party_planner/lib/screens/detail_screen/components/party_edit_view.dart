@@ -36,6 +36,8 @@ class _PartyEditViewState extends State<PartyEditView> {
 
   @override
   Widget build(BuildContext context) {
+    final Party party = ModalRoute.of(context).settings.arguments;
+
     return Container(
       height: widget.screenHeight * 0.7,
       child: Padding(
@@ -50,6 +52,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextFormField(
+                    initialValue: party != null ? party.name : "",
                     style: kHeading2,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -65,6 +68,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                     onSaved: (name) => {partyName = name},
                   ),
                   TextFormField(
+                    initialValue: party != null ? party.description : "",
                     style: kHeading2.copyWith(fontSize: ktextsm),
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -114,12 +118,18 @@ class _PartyEditViewState extends State<PartyEditView> {
                             onPressed: () {
                               _selectTime(context);
                             },
-                            child: Text(
-                              selectedTime != null
-                                  ? "${selectedTime.format(context)}"
-                                  : "Time",
-                              style: kHeading3,
-                            ),
+                            child: party != null
+                                ? Text(
+                                    DateFormat.Hm()
+                                        .format(DateTime.parse(party.dateTime)),
+                                    style: kHeading3,
+                                  )
+                                : Text(
+                                    selectedTime != null
+                                        ? "${selectedTime.format(context)}"
+                                        : "Time",
+                                    style: kHeading3,
+                                  ),
                           ),
                         ),
                       ),
@@ -136,12 +146,18 @@ class _PartyEditViewState extends State<PartyEditView> {
                             onPressed: () {
                               _selectDate(context);
                             },
-                            child: Text(
-                              selectedDate != null
-                                  ? DateFormat.yMd().format(selectedDate)
-                                  : "Date",
-                              style: kHeading3,
-                            ),
+                            child: party != null
+                                ? Text(
+                                    DateFormat.yMd()
+                                        .format(DateTime.parse(party.dateTime)),
+                                    style: kHeading3,
+                                  )
+                                : Text(
+                                    selectedDate != null
+                                        ? DateFormat.yMd().format(selectedDate)
+                                        : "Date",
+                                    style: kHeading3,
+                                  ),
                           ),
                         ),
                       ),
@@ -149,7 +165,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                   ),
                   InviteesListView(
                     screenHeight: widget.screenHeight,
-                    party: null,
+                    party: party != null ? party : null,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

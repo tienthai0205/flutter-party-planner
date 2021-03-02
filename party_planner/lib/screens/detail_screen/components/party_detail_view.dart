@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:party_planner/models/party.dart';
 import 'package:party_planner/screens/detail_screen/components/party_time_card.dart';
+import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
 import '../../../constants.dart';
 import 'invitee_list_view.dart';
 
@@ -87,6 +88,17 @@ class PartyDetailView extends StatelessWidget {
             screenHeight: screenHeight,
             party: party,
           ),
+          Row(
+            children: [
+              RoundedButton3Sides(
+                text: "Edit",
+                onPress: () {
+                  Navigator.pushNamed(context, 'new_party', arguments: party);
+                },
+                side: 'top',
+              ),
+            ],
+          )
         ],
       ),
     );

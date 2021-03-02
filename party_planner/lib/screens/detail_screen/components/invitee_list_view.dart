@@ -40,35 +40,34 @@ class _InviteesListViewState extends State<InviteesListView> {
           ),
         ),
         Container(
-          height: widget.party != null ? widget.screenHeight / 6 : 10.0,
-          child: ListView.builder(
-            padding: EdgeInsets.all(0),
-            itemBuilder: (_, index) => ListTile(
-              title: Text(invitees[index].name),
-              leading: SvgPicture.asset("assets/icons/profile_icon.svg"),
-              trailing: Icon(
-                Icons.cancel_outlined,
-                color: Color(0xffE84A5F),
-              ),
-            ),
-            itemCount: widget.party != null ? invitees.length : 0,
-          ),
-        ),
-        Container(
-          child: TextField(
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              hintText: "new invitee",
-              hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
-              suffixIcon: IconButton(
-                onPressed: () => newInvite(),
-                icon: Icon(
-                  Icons.add_circle_outline,
-                  color: kLightPinkTheme,
+          height: widget.screenHeight / 6,
+          child: widget.party != null
+              ? ListView.builder(
+                  padding: EdgeInsets.all(0),
+                  itemBuilder: (_, index) => ListTile(
+                    title: Text(invitees[index].name),
+                    leading: SvgPicture.asset("assets/icons/profile_icon.svg"),
+                    trailing: Icon(
+                      Icons.cancel_outlined,
+                      color: Color(0xffE84A5F),
+                    ),
+                  ),
+                  itemCount: invitees.length,
+                )
+              : TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: "new invitee",
+                    hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
+                    suffixIcon: IconButton(
+                      onPressed: () => newInvite(),
+                      icon: Icon(
+                        Icons.add_circle_outline,
+                        color: kLightPinkTheme,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
         ),
       ],
     );
