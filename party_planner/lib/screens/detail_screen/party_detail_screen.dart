@@ -14,7 +14,7 @@ class PartyDetailScreem extends StatelessWidget {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       body: Stack(
         alignment: Alignment.center,
         children: [
@@ -43,6 +43,21 @@ class PartyDetailScreem extends StatelessWidget {
                 screenHeight: screenHeight,
                 screenWidth: screenWidth,
                 party: party != null ? party : null),
+          ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: screenHeight * 0.7),
+                child: party != null
+                    ? PartyDetailView(
+                        screenWidth: screenWidth,
+                        screenHeight: screenHeight,
+                        party: party)
+                    : PartyEditView(
+                        screenWidth: screenWidth, screenHeight: screenHeight),
+              ),
+            ),
           ),
         ],
       ),
@@ -79,12 +94,6 @@ class PartyDetailWrapper extends StatelessWidget {
           color: kDarkTheme),
       height: screenHeight * 0.7,
       width: screenWidth,
-      child: party != null
-          ? PartyDetailView(
-              screenWidth: screenWidth,
-              screenHeight: screenHeight,
-              party: party)
-          : PartyEditView(screenWidth: screenWidth, screenHeight: screenHeight),
     );
   }
 }

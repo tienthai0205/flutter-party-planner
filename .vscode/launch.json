@@ -8,7 +8,7 @@
             "name": "party_planner",
             "cwd": "party_planner",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
         }
     ]
 } 

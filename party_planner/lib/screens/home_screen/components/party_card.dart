@@ -50,7 +50,7 @@ class PartyCard extends StatelessWidget {
               cardWidth: cardWidth,
               cardHeight: cardHeight,
               party: party,
-            )
+            ),
           ],
         ),
       ),

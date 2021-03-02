@@ -63,24 +63,6 @@ class PartyDetailView extends StatelessWidget {
             ),
           ),
           InviteesListView(screenHeight: screenHeight),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              RoundedButton3Sides(
-                text: "Cancle",
-                onPress: () {},
-                side: 'bottom',
-              ),
-              SizedBox(
-                width: 10,
-              ),
-              RoundedButton3Sides(
-                text: "Save",
-                onPress: () {},
-                side: 'top',
-              ),
-            ],
-          )
         ],
       ),
     );
