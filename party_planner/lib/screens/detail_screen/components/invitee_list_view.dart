@@ -114,6 +114,8 @@ class _InviteesListViewState extends State<InviteesListView> {
         builder: (BuildContext bc) {
           return PageView(
             controller: pageController,
+            onPageChanged: (index) =>
+                {setState(() => currentContact = _contacts.elementAt(index))},
             children: [
               Container(
                 child: ListView.builder(
@@ -124,12 +126,14 @@ class _InviteesListViewState extends State<InviteesListView> {
                       onTap: () {
                         setState(() {
                           currentContact = contact;
-                          if (currentContact != null) {
-                            pageController.nextPage(
-                                duration: Duration(milliseconds: 200),
-                                curve: Curves.ease);
-                          }
+                          print(
+                              'set state current contact ${currentContact.givenName}');
                         });
+                        if (currentContact != null) {
+                          pageController.nextPage(
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.ease);
+                        }
                       },
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 2, horizontal: 18),
@@ -148,10 +152,14 @@ class _InviteesListViewState extends State<InviteesListView> {
                 ),
               ),
               Container(
-                child: Text(currentContact.givenName),
+                child: Text(
+                    currentContact != null ? currentContact.givenName : ""),
               )
             ],
           );
         });
+    void onDataChange(Contact contact) {
+      setState(() => currentContact = contact);
+    }
   }
 }
