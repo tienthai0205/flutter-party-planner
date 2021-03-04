@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:device_calendar/device_calendar.dart';
 import 'package:flutter/material.dart';
 import 'package:party_planner/models/party.dart';
@@ -19,12 +20,12 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
   DeviceCalendarPlugin _deviceCalendarPlugin;
   String calendarId = '';
   List<Calendar> _calendars;
-  Calendar _selectedCalendar;
+
+  var calendarsResult;
   @override
   void initState() {
     super.initState();
     _deviceCalendarPlugin = new DeviceCalendarPlugin();
-    _retrieveCalendars();
   }
 
   @override
@@ -74,20 +75,51 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
     );
   }
 
-  Future addToCalendar() async {
-    print(_calendars[0].id);
-    Event eventToCreate = new Event('6E9F1ED9-5335-477F-8EDF-FE38356FE204');
-    eventToCreate.title = 'Random party';
+  Future _addToCalendar() async {
+    bool doesExist = false;
+    calendarId = _calendars[0].id;
+    Event eventToCreate = new Event(_calendars[0].id);
+    eventToCreate.title = widget.party.name;
     eventToCreate.start = DateTime.parse(widget.party.dateTime);
 
     eventToCreate.description = widget.party.description;
     eventToCreate.end =
         DateTime.parse(widget.party.dateTime).add(new Duration(hours: 3));
-    final createEventResult =
-        await _deviceCalendarPlugin.createOrUpdateEvent(eventToCreate);
-    if (createEventResult.isSuccess &&
-        (createEventResult.data?.isNotEmpty ?? false)) {
-      print(createEventResult.data);
+    RetrieveEventsParams params = RetrieveEventsParams(
+        startDate: DateTime.parse(widget.party.dateTime),
+        endDate: eventToCreate.end);
+    await _deviceCalendarPlugin
+        .retrieveEvents(calendarId, params)
+        .then((value) {
+      if (value != null) {
+        for (Event e in value.data) {
+          if (e.title == eventToCreate.title) {
+            print('change does exits, $value');
+            doesExist = true;
+          }
+        }
+        print('event ${value.data}');
+      }
+    });
+
+    if (!doesExist) {
+      final createEventResult =
+          await _deviceCalendarPlugin.createOrUpdateEvent(eventToCreate);
+      if (createEventResult.isSuccess &&
+          (createEventResult.data?.isNotEmpty ?? false)) {
+        return CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Event is successfully added to calendar!",
+        );
+      }
+    } else {
+      print('return');
+      return CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        text: "Event already exists!",
+      );
     }
   }
 
@@ -101,16 +133,18 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
         }
       }
       final calendarsResult = await _deviceCalendarPlugin.retrieveCalendars();
+      if (calendarsResult != null) {
+        _openCalendarBottomSheet();
+      }
       setState(() {
         _calendars = calendarsResult?.data;
       });
     } catch (e) {
       print(e);
     }
-    _openInviteBottomSheet();
   }
 
-  void _openInviteBottomSheet() {
+  void _openCalendarBottomSheet() {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext bc) {
@@ -128,7 +162,7 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
                     setState(() {
                       print(_calendars[index].id);
                       Navigator.pop(context);
-                      addToCalendar();
+                      _addToCalendar();
                     });
                   },
                 ),

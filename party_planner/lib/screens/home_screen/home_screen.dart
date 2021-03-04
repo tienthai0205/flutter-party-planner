@@ -43,19 +43,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // void _fetchParties() async {
-  //   const url =
-  //       "https://my-json-server.typicode.com/tienthai460592/faker/parties";
-  //   final response = await http.get(url);
-  //   parties = (jsonDecode(response.body) as List)
-  //       .map((data) => new Party.fromJson(data))
-  //       .toList();
-  //   setState(() {
-  //     this.parties = parties;
-  //     _loading = false;
-  //   });
-  // }
-
   FutureOr onGoBack(dynamic value) {
     setState(() {
       _fetchData();
