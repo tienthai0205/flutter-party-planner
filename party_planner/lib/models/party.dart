@@ -37,6 +37,22 @@ class Party {
     );
   }
 
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "name": name,
+      "description": description,
+      "dateTime": dateTime,
+      "location": {
+        "latitude": location.latitude,
+        "longitude": location.longitude,
+      },
+      "imageLink": imageLink,
+      "partyInvitees":
+          partyInvitees.map((invitee) => invitee.toJson()).toList(),
+    };
+  }
+
   void addInviteeToParty({Person invitee}) {
     partyInvitees.add(invitee);
   }

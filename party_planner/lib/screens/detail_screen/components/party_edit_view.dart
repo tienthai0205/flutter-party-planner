@@ -7,7 +7,6 @@ import 'package:intl/intl.dart';
 import 'package:party_planner/models/person.dart';
 import 'package:party_planner/services/helper.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:party_planner/models/party.dart';
@@ -191,7 +190,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       RoundedButton3Sides(
-                        text: "Cancle",
+                        text: "Cancel",
                         onPress: () {
                           Navigator.pop(context);
                         },
@@ -384,16 +383,8 @@ class _PartyEditViewState extends State<PartyEditView> {
     print(currentContact.displayName);
     String email = currentContact.emails.elementAt(0).value;
     String phone = currentContact.phones.elementAt(0).value;
-    final Uri emailLaunchUri = Uri(
-        scheme: 'mailto',
-        path: email,
-        queryParameters: {'subject': 'Invitation to ${party.name} party!'});
-    var url = emailLaunchUri.toString();
-    if (await canLaunch(url)) {
-      await launch(url);
-    } else {
-      throw 'Could not send invite';
-    }
+    String emailSubject = "You are invited to ${party.name} party!";
+    Helper().sendEmail(party.toJson(), emailSubject, email: email);
 
     Person newInvitee = new Person(
         name: currentContact.displayName, email: email, phoneNumber: phone);

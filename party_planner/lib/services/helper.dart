@@ -2,11 +2,12 @@ import 'dart:convert';
 
 import 'package:party_planner/models/party.dart';
 import 'package:party_planner/models/person.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants.dart';
 
 class Helper {
-  void modifyParty(Map<String, dynamic> updatedParty) {
+  void modifyParty(Map<String, dynamic> updatedParty) async {
     List<dynamic> parties = file_data['parties'];
     parties.forEach((party) {
       if (party['id'] == updatedParty["id"]) {
@@ -15,6 +16,8 @@ class Helper {
       }
     });
     writeToFile(file_data);
+    await sendEmail(
+        updatedParty, 'Update ${updatedParty['name']} party detail!');
   }
 
   void addInviteeToParty(Party party, Person person) {
@@ -59,6 +62,33 @@ class Helper {
       filePath.writeAsString(jsonString);
     } catch (e) {
       print("Something went wrong $e");
+    }
+  }
+
+  Future<dynamic> sendEmail(Map<String, dynamic> party, String subject,
+      {String email}) async {
+    if (email == null) {
+      party['invitees'].forEach((person) async {
+        final Uri emailLaunchUri = Uri(
+            scheme: 'mailto',
+            path: person['email'],
+            queryParameters: {'subject': subject});
+        var url = emailLaunchUri.toString();
+        if (await canLaunch(url)) {
+          await launch(url);
+        } else {
+          throw 'Could not send invite';
+        }
+      });
+    } else {
+      final Uri emailLaunchUri = Uri(
+          scheme: 'mailto', path: email, queryParameters: {'subject': subject});
+      var url = emailLaunchUri.toString();
+      if (await canLaunch(url)) {
+        await launch(url);
+      } else {
+        throw 'Could not send invite';
+      }
     }
   }
 }
