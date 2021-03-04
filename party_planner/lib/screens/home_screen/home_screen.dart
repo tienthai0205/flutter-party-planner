@@ -27,9 +27,20 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     parties = new List<Party>();
-    // _fetchParties();
+    needInit();
     // initFile();  //first time install
-    _fetchData();
+    // _fetchData();
+  }
+
+  void needInit() async {
+    filePath = await localFile;
+    String result = await filePath.readAsString();
+    if (result == null) {
+      initFile();
+      _fetchData();
+    } else {
+      _fetchData();
+    }
   }
 
   // void _fetchParties() async {

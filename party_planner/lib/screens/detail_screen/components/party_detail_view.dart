@@ -75,9 +75,9 @@ class PartyDetailView extends StatelessWidget {
                 ),
               )),
           PartyDetailTimeCard(
-            time: DateFormat.Hm().format(partyDateTime),
-            date: DateFormat.yMd().format(partyDateTime),
-          ),
+              time: DateFormat.Hm().format(partyDateTime),
+              date: DateFormat.yMd().format(partyDateTime),
+              party: party),
           Container(
             child: Text(
               party != null ? party.description : '',
