@@ -1,0 +1,103 @@
+{
+  "parties": [
+    {
+      "id": "2",
+      "name": "Champagne Lux Sips",
+      "description": "Join this amazing party where we have awesome music with special guests none other than: Mike Music, Sandra Song, Billy Boombox and Cara Caraoke!",
+      "dateTime": "2021-03-15T21:00:49+0100",
+      "location": { "latitude": 32.79, "longitude": -83.64 },
+      "invitationSent": true,
+      "imageLink": "https://images.unsplash.com/photo-1517457373958-b7bdd4587205?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1500&q=80",
+      "invitees": [
+        {
+          "name": "Ruud",
+          "email": "ruud@email.com",
+          "phoneNumber": "0123456789"
+        },
+        {
+          "name": "Kate Bell",
+          "email": "kate-bell@mac.com",
+          "phoneNumber": "(555) 564-8583"
+        },
+        {
+          "name": "Anna Haro",
+          "email": "anna-haro@mac.com",
+          "phoneNumber": "555-522-8243"
+        }
+      ]
+    },
+    {
+      "id": "3",
+      "name": "Night Craving",
+      "description": "The skyline is packed with unique skyscrapers and a new one seems to pop up every other week. The quality of life is high in Freyford and it has attracted a lot of attention. ",
+      "dateTime": "2021-03-17T22:00:49+0100",
+      "location": { "latitude": 32.79, "longitude": -83.64 },
+      "invitationSent": true,
+      "imageLink": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1650&q=80",
+      "invitees": [
+        {
+          "name": "Anna Haro",
+          "email": "anna-haro@mac.com",
+          "phoneNumber": "555-522-8243"
+        },
+        {
+          "name": "John Appleseed",
+          "email": "John-Appleseed@mac.com",
+          "phoneNumber": "888-555-5512"
+        },
+        {
+          "name": "Kate Bell",
+          "email": "kate-bell@mac.com",
+          "phoneNumber": "(555) 564-8583"
+        },
+        {
+          "name": "Hank M. Zakroff",
+          "email": "hank-zakroff@mac.com",
+          "phoneNumber": "(555) 766-4823"
+        }
+      ]
+    },
+    {
+      "id": "0b772240-7cd4-11eb-a158-21ba4750c30c",
+      "name": "party 123",
+      "description": "fwfwfwfx",
+      "dateTime": "2021-08-05T22:25:00.000",
+      "location": { "latitude": 37.785834, "longitude": -122.406417 },
+      "invitationSent": false,
+      "imageLink": null,
+      "invitees": [
+        {
+          "name": "John Appleseed",
+          "email": "John-Appleseed@mac.com",
+          "phoneNumber": "888-555-5512"
+        }
+      ]
+    },
+    {
+      "id": "1",
+      "name": "The RnB Partyyyyy",
+      "description": "Every 4 months the Festival of Dogs is celebrated with much gratification. It's a holiday with fairly modern roots, but today it is mostly associated with bonding with friends, watching special shows, lighting candles and fireworks.",
+      "dateTime": "2021-03-15T21:00:49+0100",
+      "location": { "latitude": 32.79, "longitude": -83.64 },
+      "invitationSent": true,
+      "imageLink": "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2700&q=80",
+      "invitees": [
+        {
+          "name": "Ruud",
+          "email": "ruud@email.com",
+          "phoneNumber": "0123456789"
+        },
+        {
+          "name": "Anna Haro",
+          "email": "anna-haro@mac.com",
+          "phoneNumber": "555-522-8243"
+        },
+        {
+          "name": "Hank M. Zakroff",
+          "email": "hank-zakroff@mac.com",
+          "phoneNumber": "(555) 766-4823"
+        }
+      ]
+    }
+  ]
+}

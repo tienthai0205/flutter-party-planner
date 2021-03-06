@@ -34,9 +34,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void needInit() async {
     filePath = await localFile;
-    String result = await filePath.readAsString();
-    if (result == null) {
-      initFile();
+    // Future<String> ctn = filePath.readAsString();
+    bool exist = filePath.existsSync();
+    if (!exist) {
+      await initFile();
       _fetchData();
     } else {
       _fetchData();
