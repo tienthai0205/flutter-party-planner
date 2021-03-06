@@ -28,13 +28,10 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     parties = new List<Party>();
     needInit();
-    // initFile();  //first time install
-    // _fetchData();
   }
 
   void needInit() async {
     filePath = await localFile;
-    // Future<String> ctn = filePath.readAsString();
     bool exist = filePath.existsSync();
     if (!exist) {
       await initFile();
@@ -81,9 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Container(
           margin: EdgeInsets.all(20.0),
-          decoration: BoxDecoration(
-              // border: Border.all(color: Colors.red),
-              ),
+          decoration: BoxDecoration(),
           width: screenWidth,
           child: Stack(
             children: [

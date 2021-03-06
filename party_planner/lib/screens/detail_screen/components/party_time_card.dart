@@ -20,7 +20,7 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
   DeviceCalendarPlugin _deviceCalendarPlugin;
   String calendarId = '';
   List<Calendar> _calendars;
-
+  Calendar selectedCalendar;
   var calendarsResult;
   @override
   void initState() {
@@ -77,8 +77,9 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
 
   Future _addToCalendar() async {
     bool doesExist = false;
-    calendarId = _calendars[0].id;
-    Event eventToCreate = new Event(_calendars[0].id);
+    // Other calendars are Read-only
+
+    Event eventToCreate = new Event(selectedCalendar.id);
     eventToCreate.title = widget.party.name;
     eventToCreate.start = DateTime.parse(widget.party.dateTime);
 
@@ -103,8 +104,10 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
     });
 
     if (!doesExist) {
-      final createEventResult =
+      var createEventResult;
+      createEventResult =
           await _deviceCalendarPlugin.createOrUpdateEvent(eventToCreate);
+
       if (createEventResult.isSuccess &&
           (createEventResult.data?.isNotEmpty ?? false)) {
         return CoolAlert.show(
@@ -137,7 +140,12 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
         _openCalendarBottomSheet();
       }
       setState(() {
-        _calendars = calendarsResult?.data;
+        _calendars = [];
+        for (Calendar ca in calendarsResult?.data) {
+          if (!ca.isReadOnly) {
+            _calendars.add(ca);
+          }
+        }
       });
     } catch (e) {
       print(e);
@@ -149,25 +157,42 @@ class _PartyDetailTimeCardState extends State<PartyDetailTimeCard> {
       context: context,
       builder: (BuildContext bc) {
         return Container(
-          child: ListView.builder(
-            itemCount: _calendars?.length ?? 0,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                contentPadding:
-                    const EdgeInsets.symmetric(vertical: 2, horizontal: 18),
-                title: Text(_calendars[index].name),
-                trailing: IconButton(
-                  icon: Icon(Icons.add_circle, color: kDarkTheme),
-                  onPressed: () {
-                    setState(() {
-                      print(_calendars[index].id);
-                      Navigator.pop(context);
-                      _addToCalendar();
-                    });
-                  },
+          height:
+              MediaQuery.of(context).size.height / 3, // smaller bottom sheet
+          child: Padding(
+            padding:
+                const EdgeInsets.symmetric(vertical: 10.0, horizontal: 8.0),
+            child: Column(
+              children: [
+                Text(
+                  "Select a calendar to add this event to",
+                  style: kHeading2.copyWith(color: kDarkTheme),
                 ),
-              );
-            },
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: _calendars?.length ?? 0,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ListTile(
+                        contentPadding: const EdgeInsets.symmetric(
+                            vertical: 2, horizontal: 18),
+                        title: Text(_calendars[index].name),
+                        trailing: IconButton(
+                          icon: Icon(Icons.add_circle, color: kDarkTheme),
+                          onPressed: () {
+                            setState(() {
+                              print(_calendars[index].id);
+                              selectedCalendar = _calendars[index];
+                              Navigator.pop(context);
+                              _addToCalendar();
+                            });
+                          },
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         );
       },

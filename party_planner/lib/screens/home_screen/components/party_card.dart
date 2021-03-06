@@ -40,13 +40,15 @@ class _PartyCardState extends State<PartyCard> {
   }
 
   void getLocation() {
-    LocationHelper()
-        .getAddressFromLatLng(widget.party.location)
-        .then((String data) => {
-              this.setState(() {
+    LocationHelper().getAddressFromLatLng(widget.party.location).then(
+          (String data) => {
+            this.setState(
+              () {
                 _currentAddress = data;
-              })
-            });
+              },
+            ),
+          },
+        );
   }
 
   @override
@@ -77,10 +79,11 @@ class _PartyCardState extends State<PartyCard> {
               party: widget.party,
             ),
             PartyCardBottomDetail(
-                cardWidth: widget.cardWidth,
-                cardHeight: widget.cardHeight,
-                party: widget.party,
-                locationString: _currentAddress),
+              cardWidth: widget.cardWidth,
+              cardHeight: widget.cardHeight,
+              party: widget.party,
+              locationString: _currentAddress,
+            ),
           ],
         ),
       ),

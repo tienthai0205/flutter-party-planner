@@ -6,11 +6,12 @@ import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:party_planner/models/person.dart';
 import 'package:party_planner/services/helper.dart';
+import 'package:party_planner/services/permission.dart';
+import 'package:party_planner/widgets/rounded_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:uuid/uuid.dart';
 
 import 'package:party_planner/models/party.dart';
-import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
 
 import '../../../constants.dart';
 import 'invitee_list_view.dart';
@@ -178,7 +179,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                       hintText: "new invitee",
                       hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
                       suffixIcon: IconButton(
-                        onPressed: () => newInvite(party),
+                        onPressed: () => _newInvite(party),
                         icon: Icon(
                           Icons.add_circle_outline,
                           color: kLightPinkTheme,
@@ -304,41 +305,28 @@ class _PartyEditViewState extends State<PartyEditView> {
       });
   }
 
-  getCurrentPosition() {
+  _getCurrentPosition() {
     Geolocator.getCurrentPosition().then((value) => this.setState(() {
           location = new Position(
               latitude: value.latitude, longitude: value.longitude);
         }));
   }
 
-  void newInvite(Party party) async {
-    PermissionStatus permision = await _getPermission();
+  void _newInvite(Party party) async {
+    PermissionStatus permision = await PermissionHelper().getPermission();
     if (permision == PermissionStatus.granted) {
-      getContacts(party);
+      _getContacts(party);
     } else {
-      _getPermission();
+      PermissionHelper().getPermission();
     }
   }
 
-  Future<void> getContacts(Party party) async {
+  Future<void> _getContacts(Party party) async {
     final Iterable<Contact> contacts = await ContactsService.getContacts();
     setState(() {
       _contacts = contacts;
       _openInviteBottomSheet(context, party);
     });
-  }
-
-  Future<PermissionStatus> _getPermission() async {
-    final PermissionStatus permission = await Permission.contacts.status;
-    if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.denied) {
-      final Map<Permission, PermissionStatus> permissionStatus =
-          await [Permission.contacts].request();
-      return permissionStatus[Permission.contacts] ??
-          PermissionStatus.undetermined;
-    } else {
-      return permission;
-    }
   }
 
   void _openInviteBottomSheet(context, party) {
@@ -379,23 +367,6 @@ class _PartyEditViewState extends State<PartyEditView> {
     );
   }
 
-  void addInviteeToList(Party party, BuildContext context) async {
-    print(currentContact.displayName);
-    String email = currentContact.emails.elementAt(0).value;
-    String phone = currentContact.phones.elementAt(0).value;
-    String emailSubject = "You are invited to ${party.name} party!";
-    Helper().sendEmail(party.toJson(), emailSubject, email: email);
-
-    Person newInvitee = new Person(
-        name: currentContact.displayName, email: email, phoneNumber: phone);
-    print("current party is ${party.name}");
-    setState(() {
-      Helper().addInviteeToParty(party, newInvitee);
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
-    });
-  }
-
   Future<void> _inviteDialog(Party party) async {
     return showDialog<void>(
       context: context,
@@ -416,12 +387,29 @@ class _PartyEditViewState extends State<PartyEditView> {
             TextButton(
               child: Text('Send'),
               onPressed: () {
-                addInviteeToList(party, context);
+                addInviteeToList(party);
               },
             ),
           ],
         );
       },
     );
+  }
+
+  void addInviteeToList(Party party) async {
+    print(currentContact.displayName);
+    String email = currentContact.emails.elementAt(0).value;
+    String phone = currentContact.phones.elementAt(0).value;
+    String emailSubject = "You are invited to ${party.name} party!";
+    Helper().sendEmail(party.toJson(), emailSubject, email: email);
+
+    Person newInvitee = new Person(
+        name: currentContact.displayName, email: email, phoneNumber: phone);
+    print("current party is ${party.name}");
+    setState(() {
+      Helper().addInviteeToParty(party, newInvitee);
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    });
   }
 }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:party_planner/models/party.dart';
 import 'package:party_planner/screens/detail_screen/components/party_time_card.dart';
-import 'package:party_planner/screens/detail_screen/components/rounded_button.dart';
+import 'package:party_planner/services/permission.dart';
+import 'package:party_planner/widgets/rounded_button.dart';
 import '../../../constants.dart';
 import 'invitee_list_view.dart';
 
@@ -63,7 +63,7 @@ class PartyDetailView extends StatelessWidget {
               ),
               width: screenWidth * 0.7,
               child: ListTile(
-                onTap: () => _determinePosition(),
+                onTap: () => PermissionHelper().determinePosition(),
                 title: Text(
                   locationString,
                   style: kfontSecondary.copyWith(
@@ -102,32 +102,5 @@ class PartyDetailView extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  Future<Position> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
-
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled.');
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.deniedForever) {
-      return Future.error(
-          'Location permissions are permantly denied, we cannot request permissions.');
-    }
-
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission != LocationPermission.whileInUse &&
-          permission != LocationPermission.always) {
-        return Future.error(
-            'Location permissions are denied (actual value: $permission).');
-      }
-    }
-    Geolocator.getCurrentPosition().then((value) => print(value.toString()));
-    return await Geolocator.getCurrentPosition();
   }
 }
