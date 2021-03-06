@@ -31,16 +31,19 @@ class PartyDetailView extends StatefulWidget {
 
 class _PartyDetailViewState extends State<PartyDetailView> {
   Party updatedParty;
+
   FutureOr onGoBack(dynamic value) {
-    setState(() {
-      updatedParty = Party.fromJson(value);
-      print(value);
-      widget.party.name = updatedParty.name;
-      widget.party.dateTime = updatedParty.dateTime;
-      widget.party.description = updatedParty.description;
-      widget.party.location = updatedParty.location;
-      widget.party.partyInvitees = updatedParty.partyInvitees;
-    });
+    if (value != null) {
+      setState(() {
+        updatedParty = Party.fromJson(value);
+        print(value);
+        widget.party.name = updatedParty.name;
+        widget.party.dateTime = updatedParty.dateTime;
+        widget.party.description = updatedParty.description;
+        widget.party.location = updatedParty.location;
+        widget.party.partyInvitees = updatedParty.partyInvitees;
+      });
+    }
   }
 
   @override

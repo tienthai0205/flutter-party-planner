@@ -30,6 +30,11 @@ class _HomeScreenState extends State<HomeScreen> {
     needInit();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   void needInit() async {
     filePath = await localFile;
     bool exist = filePath.existsSync();

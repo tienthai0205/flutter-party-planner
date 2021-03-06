@@ -41,6 +41,11 @@ class _PartyEditViewState extends State<PartyEditView> {
   Contact currentContact;
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final Party party = ModalRoute.of(context).settings.arguments;
 
