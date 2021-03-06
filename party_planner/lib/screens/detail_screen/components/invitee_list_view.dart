@@ -52,7 +52,11 @@ class _InviteesListViewState extends State<InviteesListView> {
                           color: Color(0xffE84A5F),
                         ),
                         onPressed: () {
-                          Helper().removeInvitee(widget.party, invitees[index]);
+                          Helper()
+                              .removeInvitee(widget.party, invitees[index])
+                              .then((value) => this.setState(() {
+                                    widget.party.partyInvitees = value;
+                                  }));
                         },
                       ),
                     ),

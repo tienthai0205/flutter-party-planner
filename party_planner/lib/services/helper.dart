@@ -36,7 +36,7 @@ class Helper {
 
   void deleteParty(String uuid) {}
 
-  void removeInvitee(Party party, Person person) {
+  Future<List<dynamic>> removeInvitee(Party party, Person person) async {
     party.partyInvitees.remove(person);
     List<dynamic> parties = file_data['parties'];
     parties.forEach((element) {
@@ -45,7 +45,8 @@ class Helper {
       }
     });
     file_data['parties'] = parties;
-    writeToFile(file_data);
+    await writeToFile(file_data);
+    return party.partyInvitees;
   }
 
   void addParty(Map<String, dynamic> json) async {
@@ -56,10 +57,10 @@ class Helper {
     writeToFile(file_data);
   }
 
-  void writeToFile(dynamic file) {
+  Future writeToFile(dynamic file) async {
     String jsonString = jsonEncode(file);
     try {
-      filePath.writeAsString(jsonString);
+      filePath.writeAsStringSync(jsonString);
     } catch (e) {
       print("Something went wrong $e");
     }
