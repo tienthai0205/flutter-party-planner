@@ -7,7 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../constants.dart';
 
 class Helper {
-  void modifyParty(Map<String, dynamic> updatedParty) async {
+  Future modifyParty(Map<String, dynamic> updatedParty) async {
     List<dynamic> parties = file_data['parties'];
     parties.forEach((party) {
       if (party['id'] == updatedParty["id"]) {
@@ -16,8 +16,9 @@ class Helper {
       }
     });
     writeToFile(file_data);
-    await sendEmail(
-        updatedParty, 'Update ${updatedParty['name']} party detail!');
+    // await sendEmail(
+    //     updatedParty, 'Update ${updatedParty['name']} party detail!');
+    return updatedParty;
   }
 
   void addInviteeToParty(Party party, Person person) {

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +11,7 @@ import 'package:party_planner/widgets/rounded_button.dart';
 import '../../../constants.dart';
 import 'invitee_list_view.dart';
 
-class PartyDetailView extends StatelessWidget {
+class PartyDetailView extends StatefulWidget {
   const PartyDetailView(
       {Key key,
       @required this.screenWidth,
@@ -24,10 +26,28 @@ class PartyDetailView extends StatelessWidget {
   final String locationString;
 
   @override
+  _PartyDetailViewState createState() => _PartyDetailViewState();
+}
+
+class _PartyDetailViewState extends State<PartyDetailView> {
+  Party updatedParty;
+  FutureOr onGoBack(dynamic value) {
+    setState(() {
+      updatedParty = Party.fromJson(value);
+      print(value);
+      widget.party.name = updatedParty.name;
+      widget.party.dateTime = updatedParty.dateTime;
+      widget.party.description = updatedParty.description;
+      widget.party.location = updatedParty.location;
+      widget.party.partyInvitees = updatedParty.partyInvitees;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     DateTime partyDateTime;
-    if (party != null) {
-      partyDateTime = DateTime.parse(party.dateTime);
+    if (widget.party != null) {
+      partyDateTime = DateTime.parse(widget.party.dateTime);
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 10.0),
@@ -38,12 +58,14 @@ class PartyDetailView extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                party.name,
-                style: kHeading.copyWith(fontSize: 20),
+              Expanded(
+                child: Text(
+                  widget.party.name,
+                  style: kHeading.copyWith(fontSize: 20),
+                ),
               ),
               IconButton(
-                icon: party.invitationSent
+                icon: widget.party.invitationSent
                     ? Icon(
                         Icons.check_circle_outline,
                         color: kPositive,
@@ -61,11 +83,11 @@ class PartyDetailView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(8),
                 color: kYellowTheme,
               ),
-              width: screenWidth * 0.7,
+              width: widget.screenWidth * 0.7,
               child: ListTile(
                 onTap: () => PermissionHelper().determinePosition(),
                 title: Text(
-                  locationString,
+                  widget.locationString,
                   style: kfontSecondary.copyWith(
                       fontWeight: FontWeight.w700, fontSize: ktextsm2),
                 ),
@@ -77,23 +99,25 @@ class PartyDetailView extends StatelessWidget {
           PartyDetailTimeCard(
               time: DateFormat.Hm().format(partyDateTime),
               date: DateFormat.yMd().format(partyDateTime),
-              party: party),
+              party: widget.party),
           Container(
             child: Text(
-              party != null ? party.description : '',
+              widget.party != null ? widget.party.description : '',
               style: kfontSecondary.copyWith(color: kLightTheme),
             ),
           ),
           InviteesListView(
-            screenHeight: screenHeight,
-            party: party,
+            screenHeight: widget.screenHeight,
+            party: updatedParty == null ? widget.party : updatedParty,
           ),
           Row(
             children: [
               RoundedButton3Sides(
                 text: "Edit",
                 onPress: () {
-                  Navigator.pushNamed(context, 'new_party', arguments: party);
+                  Navigator.pushNamed(context, 'new_party',
+                          arguments: widget.party)
+                      .then((onGoBack));
                 },
                 side: 'top',
               ),

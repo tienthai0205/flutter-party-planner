@@ -96,7 +96,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                     width: widget.screenWidth * 0.7,
                     child: TextFormField(
                       onTap: () {
-                        getCurrentPosition();
+                        _getCurrentPosition();
                       },
                       style: kHeading2.copyWith(color: kDarkTheme),
                       decoration: InputDecoration(
@@ -209,7 +209,7 @@ class _PartyEditViewState extends State<PartyEditView> {
                             Navigator.pop(context);
                           } else if (_formKey.currentState.validate() &&
                               party != null) {
-                            updateParty(party);
+                            _updateParty(party);
                           }
                         },
                         side: 'top',
@@ -249,7 +249,7 @@ class _PartyEditViewState extends State<PartyEditView> {
     Helper().addParty(party);
   }
 
-  void updateParty(Party party) {
+  void _updateParty(Party party) async {
     _formKey.currentState.save();
     print(party.id);
     String isoFormat;
@@ -279,7 +279,9 @@ class _PartyEditViewState extends State<PartyEditView> {
       "imageLink": party.imageLink,
       "invitees": inviteesList
     };
-    Helper().modifyParty(updatedParty);
+    Map<String, dynamic> update = await Helper().modifyParty(updatedParty);
+
+    Navigator.pop(context, update);
   }
 
   Future<Null> _selectDate(BuildContext context) async {
