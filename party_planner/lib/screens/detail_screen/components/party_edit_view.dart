@@ -169,20 +169,27 @@ class _PartyEditViewState extends State<PartyEditView> {
                       ),
                     ],
                   ),
-                  InviteesListView(
-                    screenHeight: widget.screenHeight,
-                    party: party != null ? party : null,
+                  Visibility(
+                    visible: party != null ? true : false,
+                    child: InviteesListView(
+                      screenHeight: widget.screenHeight,
+                      party: party != null ? party : null,
+                    ),
                   ),
-                  TextField(
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: "new invitee",
-                      hintStyle: TextStyle(color: kLightTheme.withOpacity(0.6)),
-                      suffixIcon: IconButton(
-                        onPressed: () => _newInvite(party),
-                        icon: Icon(
-                          Icons.add_circle_outline,
-                          color: kLightPinkTheme,
+                  Visibility(
+                    visible: party != null ? true : false,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        border: InputBorder.none,
+                        hintText: "new invitee",
+                        hintStyle:
+                            TextStyle(color: kLightTheme.withOpacity(0.6)),
+                        suffixIcon: IconButton(
+                          onPressed: () => _newInvite(party),
+                          icon: Icon(
+                            Icons.add_circle_outline,
+                            color: kLightPinkTheme,
+                          ),
                         ),
                       ),
                     ),
@@ -206,7 +213,6 @@ class _PartyEditViewState extends State<PartyEditView> {
                           if (_formKey.currentState.validate() &&
                               party == null) {
                             createParty();
-                            Navigator.pop(context);
                           } else if (_formKey.currentState.validate() &&
                               party != null) {
                             _updateParty(party);
@@ -225,7 +231,7 @@ class _PartyEditViewState extends State<PartyEditView> {
     );
   }
 
-  void createParty() {
+  void createParty() async {
     _formKey.currentState.save();
     var uuid = Uuid();
     print(DateFormat.yMd().format(selectedDate));
@@ -246,7 +252,8 @@ class _PartyEditViewState extends State<PartyEditView> {
       "imageLink": null,
       "invitees": []
     };
-    Helper().addParty(party);
+    await Helper().addParty(party);
+    Navigator.pop(context);
   }
 
   void _updateParty(Party party) async {

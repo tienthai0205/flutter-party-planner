@@ -16,12 +16,12 @@ class Helper {
       }
     });
     writeToFile(file_data);
-    // await sendEmail(
-    //     updatedParty, 'Update ${updatedParty['name']} party detail!');
+    await sendEmail(
+        updatedParty, 'Update ${updatedParty['name']} party detail!');
     return updatedParty;
   }
 
-  void addInviteeToParty(Party party, Person person) {
+  Future addInviteeToParty(Party party, Person person) async {
     party.addInviteeToParty(invitee: person);
     List<dynamic> parties = file_data['parties'];
 
@@ -32,7 +32,7 @@ class Helper {
     });
 
     file_data['parties'] = parties;
-    writeToFile(file_data);
+    await writeToFile(file_data);
   }
 
   void deleteParty(String uuid) {}
@@ -50,12 +50,13 @@ class Helper {
     return party.partyInvitees;
   }
 
-  void addParty(Map<String, dynamic> json) async {
+  Future<Party> addParty(Map<String, dynamic> json) async {
     Party newParty = Party.fromJson(json);
 
     file_data['parties'].add(json);
 
-    writeToFile(file_data);
+    await writeToFile(file_data);
+    return newParty;
   }
 
   Future writeToFile(dynamic file) async {
